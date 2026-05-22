@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.env
+
+# OS / редакторы
+.DS_Store
+.idea/
+.vscode/
+
+# Локальные секреты — никогда в репо
+.env.local
+secrets.json
+lesson_progress.json.bak

@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🇹🇷 Турецкий — Тренировка 13 мая 2026 · Урок 29 (sess 2) -EN/-AN</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0f1117; color: #e8e8e8; min-height: 100vh; padding: 20px; }
+  .container { max-width: 780px; margin: 0 auto; }
+  header { text-align: center; padding: 30px 0 20px; border-bottom: 1px solid #2a2a3a; margin-bottom: 30px; }
+  header h1 { font-size: 1.8rem; color: #fff; margin-bottom: 6px; }
+  header p { color: #888; font-size: 0.95rem; }
+  .badge { display: inline-block; background: #16a085; color: white; padding: 3px 10px; border-radius: 20px; font-size: 0.8rem; margin-top: 8px; }
+  .section { background: #181a24; border-radius: 14px; padding: 28px; margin-bottom: 24px; border: 1px solid #2a2a3a; }
+  .section h2 { font-size: 1.25rem; color: #f39c12; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section h3 { font-size: 1.05rem; color: #3498db; margin: 18px 0 10px; }
+  .formula { background: #1e2030; border-left: 4px solid #e74c3c; padding: 14px 18px; border-radius: 0 10px 10px 0; margin: 14px 0; font-family: 'Courier New', monospace; font-size: 1.05rem; color: #f8f8f2; line-height: 1.7; }
+  .example-box { background: #1a1c2a; border-radius: 10px; padding: 14px 18px; margin: 10px 0; border: 1px solid #2a2d40; }
+  .example-box .tr { color: #2ecc71; font-size: 1.05rem; font-weight: 600; }
+  .example-box .decomp { color: #9b59b6; font-size: 0.9rem; margin: 3px 0; }
+  .example-box .ru { color: #bbb; font-size: 0.92rem; }
+  .highlight { color: #e74c3c; font-weight: bold; }
+  .dikkat { background: #2d1a1a; border: 1px solid #c0392b; border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 0.95rem; line-height: 1.7; }
+  .dikkat strong { color: #e74c3c; }
+  .tip { background: #1a2a1a; border: 1px solid #27ae60; border-radius: 10px; padding: 14px 18px; margin: 14px 0; font-size: 0.95rem; line-height: 1.7; color: #ccc; }
+  .tip strong { color: #2ecc71; }
+  .vocab-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
+  @media (max-width: 500px) { .vocab-grid { grid-template-columns: 1fr; } }
+  .vocab-card { background: #1e2030; border-radius: 10px; padding: 14px; cursor: pointer; border: 2px solid transparent; transition: all 0.25s; text-align: center; }
+  .vocab-card:hover { border-color: #3498db; }
+  .vocab-card.revealed { border-color: #2ecc71; background: #1a2a1e; }
+  .vocab-card .word { font-size: 1.15rem; font-weight: 700; color: #2ecc71; }
+  .vocab-card .translation { font-size: 0.95rem; color: #f39c12; margin-top: 8px; display: none; }
+  .vocab-card.revealed .translation { display: block; }
+  .vocab-card .hint { font-size: 0.75rem; color: #555; margin-top: 6px; }
+  .exercise { background: #1a1c2a; border-radius: 10px; padding: 18px; margin: 12px 0; border: 1px solid #2a2d40; }
+  .exercise .q { font-size: 1rem; color: #e8e8e8; margin-bottom: 12px; line-height: 1.6; }
+  .exercise input[type="text"] { background: #0f1117; border: 2px solid #2a2a3a; border-radius: 8px; color: #fff; font-size: 1rem; padding: 8px 14px; width: 100%; max-width: 360px; outline: none; transition: border-color 0.2s; }
+  .exercise input[type="text"]:focus { border-color: #3498db; }
+  .exercise input[type="text"].correct { border-color: #2ecc71; background: #0e1f12; }
+  .exercise input[type="text"].wrong { border-color: #e74c3c; background: #1f0e0e; }
+  .check-btn { background: #3498db; color: white; border: none; border-radius: 8px; padding: 8px 20px; margin-top: 10px; cursor: pointer; font-size: 0.95rem; transition: background 0.2s; }
+  .check-btn:hover { background: #2980b9; }
+  .feedback { font-size: 0.9rem; margin-top: 8px; min-height: 22px; }
+  .feedback.ok { color: #2ecc71; }
+  .feedback.err { color: #e74c3c; }
+  .mc-options { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+  .mc-btn { background: #1e2030; color: #e8e8e8; border: 2px solid #2a2d40; border-radius: 8px; padding: 8px 18px; cursor: pointer; font-size: 0.95rem; transition: all 0.2s; }
+  .mc-btn:hover { border-color: #3498db; }
+  .mc-btn.correct-choice { background: #1a2a1e; border-color: #2ecc71; color: #2ecc71; }
+  .mc-btn.wrong-choice { background: #2d1010; border-color: #e74c3c; color: #e74c3c; }
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; }
+  th { background: #1e2030; color: #f39c12; padding: 10px 14px; text-align: left; font-size: 0.9rem; }
+  td { padding: 9px 14px; border-bottom: 1px solid #1e2030; font-size: 0.95rem; }
+  tr:hover td { background: #181a24; }
+  td .tr-word { color: #2ecc71; font-weight: 600; }
+  td .suffix { color: #e74c3c; font-weight: 700; }
+  .summary { background: #1e2030; border-radius: 10px; padding: 16px 20px; margin-top: 10px; line-height: 1.8; }
+  .summary .k { color: #f39c12; font-weight: 600; }
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+  @media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+  .compare .col { background: #1a1c2a; border: 1px solid #2a2d40; border-radius: 10px; padding: 14px; }
+  .compare h4 { color: #f39c12; font-size: 0.95rem; margin-bottom: 10px; }
+  .suffix { color: #e74c3c; font-weight: 700; }
+  .vocab-trainer { background: linear-gradient(135deg, #1a1d2e 0%, #181a24 100%); border-color: #2a3348; }
+  .trainer-progress { font-size: 0.95rem; color: #bbb; text-align: right; margin-bottom: 12px; }
+  .trainer-progress .score { color: #2ecc71; font-weight: 700; font-size: 1.15rem; }
+  .match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+  .match-card { background: #1e2030; border: 2px solid #2a2d40; border-radius: 8px; padding: 11px 14px; cursor: pointer; color: #e8e8e8; font-size: 0.98rem; transition: all 0.2s; text-align: center; font-weight: 500; }
+  .match-card:hover:not(.matched-ok) { border-color: #3498db; }
+  .match-card.selected { border-color: #f39c12; background: #2a2415; }
+  .match-card.matched-ok { border-color: #2ecc71; background: #1a2a1e; cursor: default; opacity: 0.45; pointer-events: none; }
+  .match-card.matched-fail { border-color: #e74c3c; background: #2d1010; animation: shake 0.4s; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)} }
+  .trainer-summary { background: #1e2030; border-radius: 10px; padding: 18px 22px; margin-top: 22px; line-height: 1.7; display: none; border: 1px solid #2ecc71; }
+  .trainer-summary.shown { display: block; }
+  .trainer-summary .verdict { font-size: 1.15rem; font-weight: 600; color: #2ecc71; margin-bottom: 8px; }
+  .weak-list { color: #f39c12; font-style: italic; font-size: 0.95rem; }
+  .weak-btn { display: inline-block; margin-top: 12px; padding: 9px 18px; background: #f39c12; color: #181a24; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.92rem; }
+  .weak-btn:hover { background: #e67e22; }
+  code { background:#1e2030; padding:2px 6px; border-radius:4px; color:#f39c12; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>🇹🇷 Турецкий язык</h1>
+  <p>Тренировка от 13 мая 2026 · Урок 29 (session 2) — Subject-причастие <strong style="color:#e74c3c;">-EN / -AN</strong> и сравнение с <strong style="color:#e74c3c;">-DIK</strong></p>
+  <span class="badge">Уровень: продвинутый</span>
+</header>
+
+<!-- БЛОК 1: Словарная разминка — вчерашние слова -->
+<section class="section">
+  <h2>📚 Словарная разминка — слова вчерашнего урока (-DIK)</h2>
+  <p style="color:#888; margin-bottom:16px; font-size:0.9rem;">Вчерашняя пятёрка. Нажми на карточку, чтобы открыть перевод и контекст.</p>
+  <div class="vocab-grid">
+    <div class="vocab-card" onclick="this.classList.toggle('revealed')"><div class="word">tanımak</div><div class="translation">знать (быть знакомым)</div><div class="hint">→ Bu adamı tanıyor musun?</div></div>
+    <div class="vocab-card" onclick="this.classList.toggle('revealed')"><div class="word">konu</div><div class="translation">тема / предмет (разговора)</div><div class="hint">→ Konuyu değiştirelim.</div></div>
+    <div class="vocab-card" onclick="this.classList.toggle('revealed')"><div class="word">öğrenmek</div><div class="translation">учить / узнавать</div><div class="hint">→ Türkçe öğreniyorum.</div></div>
+    <div class="vocab-card" onclick="this.classList.toggle('revealed')"><div class="word">inanmak</div><div class="translation">верить (+ Dat)</div><div class="hint">→ Sana inanıyorum.</div></div>
+    <div class="vocab-card" onclick="this.classList.toggle('revealed')"><div class="word">yer</div><div class="translation">место</div><div class="hint">→ Burası güzel bir yer.</div></div>
+  </div>
+</section>
+
+<!-- БЛОК 2: 5 новых слов · Урок 29 (session 2) -->
+<section class="section">
+  <h2>🆕 5 новых слов · Урок 29 (продолжение)</h2>
+  <p style="color:#bbb; line-height:1.7; margin-bottom:14px;">Слова, идеально подходящие к относительным клаузулам: «тот, кто <em>выбирает</em>», «то, что мы <em>потеряли</em>», «человек, которого я <em>предпочитаю</em>».</p>
+
+  <div class="example-box">
+    <div class="tr">tanıdık</div>
+    <div class="decomp">tanı-<span class="suffix">dık</span> ← буквально «знаемый» — само слово сделано из вчерашней грамматики!</div>
+    <div class="ru">знакомый (человек) · знакомое (лицо)</div>
+    <div style="color:#888; margin-top:6px; font-size:0.88rem;">→ <em>O benim eski bir tanıdığım.</em> — Он мой старый знакомый.</div>
+  </div>
+
+  <div class="example-box">
+    <div class="tr">seçmek</div>
+    <div class="decomp">seç-mek</div>
+    <div class="ru">выбирать</div>
+    <div style="color:#888; margin-top:6px; font-size:0.88rem;">→ <em>Hangi renkleri seçtin?</em> — Какие цвета ты выбрал?</div>
+  </div>
+
+  <div class="example-box">
+    <div class="tr">kaybetmek</div>
+    <div class="decomp">kayb-et-mek (составной с et-)</div>
+    <div class="ru">терять (что-либо) · проигрывать</div>
+    <div style="color:#888; margin-top:6px; font-size:0.88rem;">→ <em>Anahtarımı kaybettim.</em> — Я потерял свои ключи.</div>
+  </div>
+
+  <div class="example-box">
+    <div class="tr">bulmak</div>
+    <div class="decomp">bul-mak (после b → твёрдый, но vowel harmony нормальная)</div>
+    <div class="ru">находить</div>
+    <div style="color:#888; margin-top:6px; font-size:0.88rem;">→ <em>Aradığım şeyi buldum.</em> — Я нашёл то, что искал.</div>
+  </div>
+
+  <div class="example-box">
+    <div class="tr">tercih etmek</div>
+    <div class="decomp">tercih + et-mek (предпочтение + делать)</div>
+    <div class="ru">предпочитать</div>
+    <div style="color:#888; margin-top:6px; font-size:0.88rem;">→ <em>Çayı kahveye tercih ederim.</em> — Чай я предпочитаю кофе.</div>
+  </div>
+</section>
+
+<!-- БЛОК 3: Словарный тренажёр -->
+<section class="section vocab-trainer">
+  <h2>🧠 Словарный тренажёр</h2>
+  <p style="color:#bbb; line-height:1.7; margin-bottom:14px;">
+    Пять упражнений на 8–12 минут. Отвечай без подглядываний — ошибки попадут в «слабые» и вернутся в следующих тренировках.
+  </p>
+  <div class="trainer-progress">
+    Счёт: <span class="score" id="t-score">0</span> / <span id="t-total">23</span>
+  </div>
+
+  <!-- A. Recognition TR→RU (6) -->
+  <h3>Часть 1 · Распознавание (TR → RU)</h3>
+
+  <div class="exercise">
+    <div class="q"><strong>tanıdık</strong> — это…</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="trainerMC(this,true,'tanıdık')" data-correct="true">знакомый</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'tanıdık')">похожий</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'tanıdık')">странный</button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>seçmek</strong> — это…</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="trainerMC(this,false,'seçmek')">пробовать</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'seçmek')">смотреть</button>
+      <button class="mc-btn" onclick="trainerMC(this,true,'seçmek')" data-correct="true">выбирать</button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>bulmak</strong> — это…</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="trainerMC(this,true,'bulmak')" data-correct="true">находить</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'bulmak')">приносить</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'bulmak')">забывать</button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>inanmak</strong> — это…</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="trainerMC(this,false,'inanmak')">слушать</button>
+      <button class="mc-btn" onclick="trainerMC(this,true,'inanmak')" data-correct="true">верить (во что/кого-то)</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'inanmak')">просить</button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>konu</strong> — это…</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="trainerMC(this,false,'konu')">гость</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'konu')">письмо</button>
+      <button class="mc-btn" onclick="trainerMC(this,true,'konu')" data-correct="true">тема / предмет разговора</button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>yer</strong> — это…</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="trainerMC(this,true,'yer')" data-correct="true">место</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'yer')">направление</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'yer')">время</button>
+    </div>
+  </div>
+
+  <!-- B. Production MC RU→TR (5) -->
+  <h3>Часть 2 · Воспроизведение (RU → TR)</h3>
+
+  <div class="exercise">
+    <div class="q">«выбирать» по-турецки —</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="trainerMC(this,false,'seçmek')">beklemek</button>
+      <button class="mc-btn" onclick="trainerMC(this,true,'seçmek')" data-correct="true">seçmek</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'seçmek')">istemek</button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="q">«терять» —</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="trainerMC(this,true,'kaybetmek')" data-correct="true">kaybetmek</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'kaybetmek')">bırakmak</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'kaybetmek')">unutmak</button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="q">«тема (разговора)» —</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="trainerMC(this,false,'konu')">soru</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'konu')">cevap</button>
+      <button class="mc-btn" onclick="trainerMC(this,true,'konu')" data-correct="true">konu</button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="q">«сказка» —</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="trainerMC(this,true,'masal')" data-correct="true">masal</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'masal')">hikaye</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'masal')">şiir</button>
+    </div>
+  </div>
+
+  <div class="exercise">
+    <div class="q">«оказывается / на самом деле» (вводное) —</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="trainerMC(this,false,'meğer')">galiba</button>
+      <button class="mc-btn" onclick="trainerMC(this,true,'meğer')" data-correct="true">meğer</button>
+      <button class="mc-btn" onclick="trainerMC(this,false,'meğer')">belki</button>
+    </div>
+  </div>
+
+  <!-- C. Matching pairs (6) -->
+  <h3>Часть 3 · Сопоставь пары</h3>
+  <p style="color:#888; font-size:0.9rem; margin-bottom:8px;">Кликай попарно: сначала турецкое слово, потом перевод. Промах подсвечивается красным.</p>
+  <div class="match-grid" id="match-grid">
+    <div class="match-card" data-id="1" data-side="tr" onclick="matchSelect(this)">duymak</div>
+    <div class="match-card" data-id="3" data-side="ru" onclick="matchSelect(this)">если (вводное)</div>
+    <div class="match-card" data-id="2" data-side="tr" onclick="matchSelect(this)">anlatmak</div>
+    <div class="match-card" data-id="5" data-side="ru" onclick="matchSelect(this)">страна</div>
+    <div class="match-card" data-id="3" data-side="tr" onclick="matchSelect(this)">eğer</div>
+    <div class="match-card" data-id="1" data-side="ru" onclick="matchSelect(this)">слышать</div>
+    <div class="match-card" data-id="4" data-side="tr" onclick="matchSelect(this)">hava</div>
+    <div class="match-card" data-id="6" data-side="ru" onclick="matchSelect(this)">цвет</div>
+    <div class="match-card" data-id="5" data-side="tr" onclick="matchSelect(this)">ülke</div>
+    <div class="match-card" data-id="2" data-side="ru" onclick="matchSelect(this)">рассказывать</div>
+    <div class="match-card" data-id="6" data-side="tr" onclick="matchSelect(this)">renk</div>
+    <div class="match-card" data-id="4" data-side="ru" onclick="matchSelect(this)">погода</div>
+  </div>
+
+  <!-- D. Fill in the blank (3) -->
+  <h3>Часть 4 · Вставь слово в пропуск</h3>
+
+  <div class="exercise">
+    <div class="q">Bu benim eski bir _____. — Это мой старый знакомый.</div>
+    <input type="text" id="t-d1" placeholder="tanı…" autocomplete="off">
+    <button class="check-btn" onclick="trainerType('t-d1','tanıdığım','tanıdık')">Проверить</button>
+    <div class="feedback" id="t-d1-fb"></div>
+    <div style="color:#666; font-size:0.85rem; margin-top:6px;">Подсказка: «мой знакомый» = tanı-<strong>DIK</strong>+<strong>im</strong> → перед гласной k → ğ.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="q">Anahtarımı _____. — Я потерял свои ключи.</div>
+    <input type="text" id="t-d2" placeholder="kayb-" autocomplete="off">
+    <button class="check-btn" onclick="trainerType('t-d2','kaybettim','kaybetmek')">Проверить</button>
+    <div class="feedback" id="t-d2-fb"></div>
+    <div style="color:#666; font-size:0.85rem; margin-top:6px;">Подсказка: -DI прошедшее, 1 л. ед. → -ttim после хард-окончания et-.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="q">Çayı kahveye _____ ederim. — Чай я предпочитаю кофе.</div>
+    <input type="text" id="t-d3" placeholder="tercih?" autocomplete="off">
+    <button class="check-btn" onclick="trainerType('t-d3','tercih','tercih etmek')">Проверить</button>
+    <div class="feedback" id="t-d3-fb"></div>
+  </div>
+
+  <!-- E. Free typing - WEAK words priority -->
+  <h3>Часть 5 · Переведи с русского на турецкий</h3>
+  <p style="color:#888; font-size:0.9rem; margin-bottom:8px;">Самое сложное — без подсказок. Здесь приоритетно идут «слабые» слова из <code>weak_words</code>.</p>
+
+  <div class="exercise">
+    <div class="q">«объяснять» (инфинитив)</div>
+    <input type="text" id="t-e1" placeholder="açı…" autocomplete="off">
+    <button class="check-btn" onclick="trainerType('t-e1','açıklamak','açıklamak')">Проверить</button>
+    <div class="feedback" id="t-e1-fb"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="q">«брать / покупать» (инфинитив)</div>
+    <input type="text" id="t-e2" placeholder="ал-…" autocomplete="off">
+    <button class="check-btn" onclick="trainerType('t-e2','almak','almak')">Проверить</button>
+    <div class="feedback" id="t-e2-fb"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="q">«находить» (инфинитив)</div>
+    <input type="text" id="t-e3" placeholder="бул-…" autocomplete="off">
+    <button class="check-btn" onclick="trainerType('t-e3','bulmak','bulmak')">Проверить</button>
+    <div class="feedback" id="t-e3-fb"></div>
+  </div>
+
+  <div class="trainer-summary" id="t-summary"></div>
+</section>
+
+<!-- БЛОК 4: Recall — грамматика вчерашнего урока (-DIK) -->
+<section class="section">
+  <h2>⚡ Быстрый recall — -DIK / -DİĞİ (вчера)</h2>
+  <p style="color:#888; margin-bottom:14px; font-size:0.9rem;">Прежде чем пойдём в новую тему — пара проверок на вчерашнее. Это разогрев перед сравнением.</p>
+
+  <div class="exercise">
+    <div class="q">1. Преобразуй: «книга, которую я читаю» (okumak + kitap)</div>
+    <input type="text" id="r1" placeholder="…kitap" autocomplete="off">
+    <button class="check-btn" onclick="checkAns('r1','okuduğum kitap')">Проверить</button>
+    <div class="feedback" id="r1-fb"></div>
+    <div style="color:#666; font-size:0.85rem; margin-top:6px;">Подсказка: oku- + -DUK + -um → buffer k→ğ.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="q">2. «Место, куда мы вчера ходили» (git-, biz, dün, yer)</div>
+    <input type="text" id="r2" placeholder="dün gittiğimiz yer" autocomplete="off">
+    <button class="check-btn" onclick="checkAns('r2','dün gittiğimiz yer')">Проверить</button>
+    <div class="feedback" id="r2-fb"></div>
+    <div style="color:#666; font-size:0.85rem; margin-top:6px;">Подсказка: git- + -TIK (FSTKÇŞHP! d→t) + -imiz.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="q">3. Какая разница: «okuduğum kitap» vs «okuyan adam»?</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="markChoice(this,true)" data-correct="true">в 1-м кто-то читает книгу, во 2-м человек сам читает</button>
+      <button class="mc-btn" onclick="markChoice(this,false)">это одно и то же</button>
+      <button class="mc-btn" onclick="markChoice(this,false)">отличаются временем</button>
+    </div>
+  </div>
+</section>
+
+<!-- БЛОК 5: Новая грамматика - -EN / -AN -->
+<section class="section">
+  <h2>📖 Новая грамматика — suffix <span style="color:#e74c3c;">-EN / -AN</span> «тот, кто делает...»</h2>
+
+  <p style="line-height:1.8; color:#ccc; margin-bottom:14px;">
+    Вчера мы выучили <strong>-DIK</strong>: «то, что <em>кто-то</em> делает над X-ом». Сегодня — <strong>-EN/-AN</strong>: когда сам X <em>делает</em> действие.
+    Это называется «причастие действительного залога» (active participle), но проще запомнить как «тот/то/те, что Х-ит».
+  </p>
+
+  <h3>Формула</h3>
+  <div class="formula">
+    <strong>глагол (корень)</strong> + <span class="suffix">-EN / -AN</span> = «тот, кто/что Х-ит» (активное действие)<br>
+    После гласной — буфер <span class="suffix">-y-</span>: oku-<span class="suffix">y-an</span>, bekle-<span class="suffix">y-en</span>.<br>
+    <strong>Никакого посессива!</strong> -EN сам уже даёт значение «деятель», субъект не выражается.
+  </div>
+
+  <h3>Гармония гласных — 2 варианта</h3>
+  <table>
+    <tr><th>Последний гласный корня</th><th>Суффикс</th><th>Пример</th></tr>
+    <tr><td><strong>a / ı / o / u</strong> (твёрдые)</td><td><span class="suffix">-AN</span></td><td><span class="tr-word">bak-an</span> · «смотрящий»</td></tr>
+    <tr><td><strong>e / i / ö / ü</strong> (мягкие)</td><td><span class="suffix">-EN</span></td><td><span class="tr-word">gel-en</span> · «приходящий»</td></tr>
+  </table>
+
+  <div class="dikkat">
+    <strong>DİKKAT ET!</strong><br>
+    Если корень оканчивается на гласную — вставляй буфер <strong>-y-</strong>:<br>
+    • oku-mak → oku<strong>y</strong>-an (читающий)<br>
+    • bekle-mek → bekle<strong>y</strong>-en (ждущий)<br>
+    • söyle-mek → söyle<strong>y</strong>-en (говорящий)
+  </div>
+
+  <h3>Примеры в живой речи</h3>
+
+  <div class="example-box">
+    <div class="tr">gelen otobüs</div>
+    <div class="decomp">gel-en otobüs (приходящий автобус)</div>
+    <div class="ru">приходящий / прибывающий автобус</div>
+  </div>
+
+  <div class="example-box">
+    <div class="tr">çalışan adam</div>
+    <div class="decomp">çalış-an adam</div>
+    <div class="ru">работающий человек</div>
+  </div>
+
+  <div class="example-box">
+    <div class="tr">Türkçe konuşan turist</div>
+    <div class="decomp">konuş-an turist</div>
+    <div class="ru">турист, говорящий по-турецки</div>
+  </div>
+
+  <div class="example-box">
+    <div class="tr">okuyan kız</div>
+    <div class="decomp">oku-<strong>y</strong>-an kız (буфер -y- после гласной)</div>
+    <div class="ru">читающая девочка</div>
+  </div>
+
+  <h3>🆚 Главное сравнение: <span class="suffix">-EN</span> vs <span class="suffix">-DIK</span></h3>
+
+  <div class="compare">
+    <div class="col">
+      <h4>-EN / -AN — деятель</h4>
+      <p style="color:#bbb; font-size:0.92rem;">Существительное <strong>само делает</strong> действие.</p>
+      <ul style="color:#ccc; margin-top:8px; padding-left:18px; line-height:1.7;">
+        <li><span class="tr-word">gelen adam</span> — пришедший человек (адам сам пришёл)</li>
+        <li><span class="tr-word">okuyan kız</span> — читающая девочка (она сама читает)</li>
+        <li><span class="tr-word">çalışan kadın</span> — работающая женщина</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h4>-DIK + посессив — объект</h4>
+      <p style="color:#bbb; font-size:0.92rem;">Существительное — <strong>объект</strong>, кто-то другой действует.</p>
+      <ul style="color:#ccc; margin-top:8px; padding-left:18px; line-height:1.7;">
+        <li><span class="tr-word">tanıdığım adam</span> — мужчина, которого я знаю</li>
+        <li><span class="tr-word">okuduğum kitap</span> — книга, которую я читаю</li>
+        <li><span class="tr-word">gittiğim yer</span> — место, куда я хожу</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tip">
+    <strong>Лайфхак:</strong> задай вопрос «КТО делает?». Если ответ = <em>это самое существительное</em>, бери <span class="suffix">-EN</span>.
+    Если ответ = <em>другой деятель (я / ты / мы)</em>, бери <span class="suffix">-DIK</span> + посессив.
+  </div>
+
+  <h3>Negation: -mEYEn «тот, кто НЕ делает»</h3>
+  <div class="formula">
+    глагол + <span class="suffix">-mE</span> (отрицание) + <span class="suffix">-yEn</span><br>
+    bil-<span class="suffix">me-yen</span> = «незнающий» · gel-<span class="suffix">me-yen</span> = «не пришедший»
+  </div>
+  <table>
+    <tr><th>Глагол</th><th>+ EN</th><th>+ NEG + EN</th></tr>
+    <tr><td>bilmek</td><td><span class="tr-word">bilen</span> «знающий»</td><td><span class="tr-word">bilmeyen</span> «незнающий»</td></tr>
+    <tr><td>çalışmak</td><td><span class="tr-word">çalışan</span> «работающий»</td><td><span class="tr-word">çalışmayan</span> «не работающий»</td></tr>
+    <tr><td>anlamak</td><td><span class="tr-word">anlayan</span> «понимающий»</td><td><span class="tr-word">anlamayan</span> «не понимающий»</td></tr>
+  </table>
+
+  <h3>🔮 Бонус — будущее относительное -ECEĞİ</h3>
+  <p style="color:#bbb; line-height:1.7;">Для будущего «то, что я сделаю / тот, который я выберу» работает <strong>-ECEK</strong> + посессив (по той же схеме что -DIK):</p>
+  <div class="example-box">
+    <div class="tr">seçeceğim kitap</div>
+    <div class="decomp">seç- + <span class="suffix">-eceK</span> + <span class="suffix">-im</span> (k → ğ перед гласной)</div>
+    <div class="ru">книга, которую я выберу</div>
+  </div>
+  <div class="example-box">
+    <div class="tr">yarın gideceğimiz yer</div>
+    <div class="decomp">git- + <span class="suffix">-eceK</span> + <span class="suffix">-imiz</span></div>
+    <div class="ru">место, куда мы поедем завтра</div>
+  </div>
+  <p style="color:#888; font-size:0.88rem; margin-top:8px;">Подробно — в одной из следующих тренировок. Сегодня просто увидь, что схема та же.</p>
+</section>
+
+<!-- БЛОК 6: Упражнения по грамматике -->
+<section class="section">
+  <h2>✍️ Упражнения · -EN / -AN vs -DIK</h2>
+
+  <div class="exercise">
+    <div class="q"><strong>1.</strong> Выбери правильный суффикс: «Yolda yürü____ kadın annem.» (женщина, идущая по дороге — моя мама)</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="markChoice(this,true)" data-correct="true">-yen</button>
+      <button class="mc-btn" onclick="markChoice(this,false)">-düğüm</button>
+      <button class="mc-btn" onclick="markChoice(this,false)">-yor</button>
+    </div>
+    <div style="color:#666; font-size:0.85rem; margin-top:8px;">Кто идёт? Сама kadın. → -EN. После гласной → буфер -y-.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>2.</strong> «Кофе, который ты пьёшь» — собери из iç- + sen + kahve</div>
+    <input type="text" id="g2" placeholder="iç…kahve" autocomplete="off">
+    <button class="check-btn" onclick="checkAns('g2','içtiğin kahve')">Проверить</button>
+    <div class="feedback" id="g2-fb"></div>
+    <div style="color:#666; font-size:0.85rem; margin-top:6px;">Здесь kahve — объект; деятель «ты». → -DIK + посессив 2 л. (sen → -in). FSTKÇŞHP: ç → твёрдый → d → t.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>3.</strong> «Турист, не говорящий по-турецки» — собери из konuş- + turist (negation)</div>
+    <input type="text" id="g3" placeholder="…turist" autocomplete="off">
+    <button class="check-btn" onclick="checkAns('g3','türkçe konuşmayan turist')">Проверить</button>
+    <div class="feedback" id="g3-fb"></div>
+    <div style="color:#666; font-size:0.85rem; margin-top:6px;">Кто говорит/не говорит? Сам турист. → -EN. Negation: -mA-yan.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>4.</strong> -EN или -DIK? «человек, который меня знает»</div>
+    <div class="mc-options">
+      <button class="mc-btn" onclick="markChoice(this,true)" data-correct="true">beni tanıyan adam</button>
+      <button class="mc-btn" onclick="markChoice(this,false)">beni tanıdığım adam</button>
+    </div>
+    <div style="color:#666; font-size:0.85rem; margin-top:8px;">Кто знает? Сам адам → -EN. (А «человек, которого я знаю» = tanıdığım adam — там объект, я знаю его.)</div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>5.</strong> Заполни: «_____ otobüse bineceğim.» (Сяду в подъезжающий автобус.) gel- → ?</div>
+    <input type="text" id="g5" placeholder="gel-..." autocomplete="off">
+    <button class="check-btn" onclick="checkAns('g5','gelen')">Проверить</button>
+    <div class="feedback" id="g5-fb"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>6.</strong> Переведи: «студент, изучающий турецкий» (öğrenci, Türkçe öğren-)</div>
+    <input type="text" id="g6" placeholder="…öğrenci" autocomplete="off">
+    <button class="check-btn" onclick="checkAns('g6','türkçe öğrenen öğrenci')">Проверить</button>
+    <div class="feedback" id="g6-fb"></div>
+    <div style="color:#666; font-size:0.85rem; margin-top:6px;">Сам öğrenci изучает → -EN. öğren- + en → öğrenen.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>7.</strong> Переведи: «вещь, которую я потерял» (kaybetmek + şey)</div>
+    <input type="text" id="g7" placeholder="…şey" autocomplete="off">
+    <button class="check-btn" onclick="checkAns('g7','kaybettiğim şey')">Проверить</button>
+    <div class="feedback" id="g7-fb"></div>
+    <div style="color:#666; font-size:0.85rem; margin-top:6px;">şey — объект, я — деятель. → -DIK + -im. kaybet- (твёрдое t) → kaybet-tiğ-im.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>8.</strong> Исправь ошибку: <em>«Türkçe konuştuğum turist çok hoş.»</em> — Турист, говорящий по-турецки, очень мил.</div>
+    <input type="text" id="g8" placeholder="исправь…" autocomplete="off">
+    <button class="check-btn" onclick="checkAns('g8','türkçe konuşan turist çok hoş')">Проверить</button>
+    <div class="feedback" id="g8-fb"></div>
+    <div style="color:#666; font-size:0.85rem; margin-top:6px;">Турист сам говорит → нужно -EN, а не -DIK.</div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>9.</strong> Заполни: «Aradığım şeyi _____.» (Я нашёл то, что искал.) bul- + 1 л. ед. ч., -DI</div>
+    <input type="text" id="g9" placeholder="bul…" autocomplete="off">
+    <button class="check-btn" onclick="checkAns('g9','buldum')">Проверить</button>
+    <div class="feedback" id="g9-fb"></div>
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>10.</strong> Переведи: «знакомый, которого я ищу» (tanıdık + aramak)</div>
+    <input type="text" id="g10" placeholder="…tanıdık" autocomplete="off">
+    <button class="check-btn" onclick="checkAns('g10','aradığım tanıdık')">Проверить</button>
+    <div class="feedback" id="g10-fb"></div>
+    <div style="color:#666; font-size:0.85rem; margin-top:6px;">Tanıdık — объект, я ищу его. → -DIK: ara- → aradığım.</div>
+  </div>
+</section>
+
+<!-- БЛОК 7: Свободная продукция -->
+<section class="section">
+  <h2>🎨 Свободная продукция</h2>
+  <p style="color:#ccc; line-height:1.8;">
+    Составь по одному предложению на каждый шаблон. Это формирует у тебя <strong>активное</strong> владение, а не просто узнавание.
+  </p>
+
+  <div class="exercise">
+    <div class="q"><strong>A.</strong> «(кто-то) Х-ающий…» — с -EN/-AN, минимум 2 слова после причастия.</div>
+    <div style="color:#888; font-size:0.88rem;">Примеры: <em>Türkçe konuşan turistler çok dost canlısı.</em> · <em>Yağmurda koşan çocuk üşüdü.</em></div>
+    <input type="text" id="p1" placeholder="свой пример…" style="max-width:100%;">
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>B.</strong> «(вещь/место/человек), который Я Х-ил» — с -DIK + посессив.</div>
+    <div style="color:#888; font-size:0.88rem;">Примеры: <em>Dün gittiğim restoran çok pahalıydı.</em> · <em>Seçtiğim renk mavi.</em></div>
+    <input type="text" id="p2" placeholder="свой пример…" style="max-width:100%;">
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>C.</strong> «(кто-то), который НЕ делает Х» — -mEYEn.</div>
+    <div style="color:#888; font-size:0.88rem;">Примеры: <em>Türkçe bilmeyen biri.</em> · <em>Gelmeyen arkadaşımı bekledim.</em></div>
+    <input type="text" id="p3" placeholder="свой пример…" style="max-width:100%;">
+  </div>
+
+  <div class="exercise">
+    <div class="q"><strong>D.</strong> Сравнительный мини-абзац (2–3 предложения): опиши кого-нибудь в комнате/на улице/в видео используя оба причастия (-EN и -DIK).</div>
+    <textarea id="p4" rows="3" style="width:100%; max-width:100%; background:#0f1117; border:2px solid #2a2a3a; border-radius:8px; color:#fff; font-size:0.95rem; padding:10px 14px; font-family:inherit;" placeholder="напр.: Sağ tarafta oturan kız okul arkadaşım. Onun okuduğu kitap çok ilginç…"></textarea>
+  </div>
+
+  <div class="tip">
+    <strong>Совет:</strong> когда строишь причастную фразу — спроси «КТО делает действие?». Это твой определитель -EN vs -DIK.
+    Чем чаще ты задаёшь этот вопрос на лету, тем быстрее структура встанет в активную грамматику.
+  </div>
+</section>
+
+<!-- БЛОК 8: Мини-ревью -->
+<section class="section">
+  <h2>🧭 Мини-ревью урока</h2>
+  <div class="summary">
+    <p>• <span class="k">-EN / -AN</span> = «тот, кто/что Х-ит» — деятель = само существительное.</p>
+    <p>• Гармония: <span class="k">a/ı/o/u → -AN</span>, <span class="k">e/i/ö/ü → -EN</span>. После гласной — буфер <span class="k">-y-</span>.</p>
+    <p>• Никакого посессива! Конструкция законченная сама по себе: <code>gelen otobüs</code>.</p>
+    <p>• <span class="k">Negation:</span> -ME + -YEN → <code>bilmeyen</code>, <code>gelmeyen</code>.</p>
+    <p>• <span class="k">-DIK vs -EN:</span> -EN — субъект (само существительное действует), -DIK — объект (кто-то другой действует над ним).</p>
+    <p>• <span class="k">Будущее (-ECEĞİ):</span> схема как -DIK, но с -ECEK + посессив: <code>seçeceğim kitap</code>.</p>
+    <p>• <span class="k">Новые слова:</span> tanıdık, seçmek, kaybetmek, bulmak, tercih etmek.</p>
+  </div>
+  <div class="tip" style="margin-top:14px;">
+    <strong>На завтра:</strong> закрепим обе формы и пойдём к уроку 30 — наречия с -CE и местоименный суффикс -Kİ («мой/твой/тот, который...»).
+  </div>
+</section>
+
+</div>
+
+<script>
+const trainerState = { correct: 0, total: 0, weak: [], totalQuestions: 23 };
+
+function trainerMC(btn, isCorrect, word) {
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.mc-btn').forEach(b => { b.disabled = true; b.style.cursor = 'default'; b.style.opacity = '0.55'; });
+  btn.style.opacity = '1';
+  if (isCorrect) {
+    btn.classList.add('correct-choice');
+    trainerState.correct++;
+  } else {
+    btn.classList.add('wrong-choice');
+    trainerState.weak.push(word);
+    parent.querySelectorAll('.mc-btn[data-correct="true"]').forEach(b => { b.classList.add('correct-choice'); b.style.opacity = '1'; });
+  }
+  trainerState.total++;
+  updateTrainerScore();
+}
+
+function trainerType(inputId, correct, word) {
+  const el = document.getElementById(inputId);
+  const fb = document.getElementById(inputId + '-fb');
+  const val = el.value.trim().toLowerCase();
+  const ok = val === correct.toLowerCase();
+  if (ok) {
+    el.classList.add('correct');
+    fb.className = 'feedback ok'; fb.textContent = '✓ Верно';
+    trainerState.correct++;
+  } else {
+    el.classList.add('wrong');
+    fb.className = 'feedback err'; fb.textContent = '✗ Правильно: ' + correct;
+    trainerState.weak.push(word);
+  }
+  el.disabled = true;
+  trainerState.total++;
+  updateTrainerScore();
+}
+
+let matchSel = null;
+function matchSelect(card) {
+  if (card.classList.contains('matched-ok')) return;
+  if (!matchSel) { matchSel = card; card.classList.add('selected'); return; }
+  if (matchSel === card) { card.classList.remove('selected'); matchSel = null; return; }
+  if (matchSel.dataset.id === card.dataset.id && matchSel.dataset.side !== card.dataset.side) {
+    matchSel.classList.remove('selected'); matchSel.classList.add('matched-ok');
+    card.classList.add('matched-ok');
+    trainerState.correct++;
+    matchSel = null;
+  } else {
+    const wrong1 = matchSel, wrong2 = card;
+    wrong1.classList.add('matched-fail'); wrong2.classList.add('matched-fail');
+    setTimeout(() => { wrong1.classList.remove('matched-fail','selected'); wrong2.classList.remove('matched-fail'); }, 500);
+    trainerState.weak.push(matchSel.textContent);
+    matchSel = null;
+  }
+  trainerState.total++;
+  updateTrainerScore();
+}
+
+function updateTrainerScore() {
+  document.getElementById('t-score').textContent = trainerState.correct;
+  if (trainerState.total >= trainerState.totalQuestions) showTrainerSummary();
+}
+
+function showTrainerSummary() {
+  const pct = Math.round(100 * trainerState.correct / trainerState.totalQuestions);
+  let verdict;
+  if (pct >= 90) verdict = '🏆 Великолепно!';
+  else if (pct >= 70) verdict = '✅ Хорошо.';
+  else if (pct >= 50) verdict = '⚡ Норм, но нужно ещё прокрутить.';
+  else verdict = '🔄 Вернёмся к этим словам в следующих тренировках.';
+  const weak = [...new Set(trainerState.weak)].slice(0, 8);
+  const weakHTML = weak.length ? `<div class="weak-list">Слабые места: ${weak.join(', ')}</div>` : '';
+  const weakBtn = weak.length
+    ? `<a class="weak-btn" target="_blank" href="https://t.me/myturkish_tutor_bot?text=${encodeURIComponent('/weak ' + weak.join(' '))}">📤 Отметить как слабые в боте</a>`
+    : '';
+  const sum = document.getElementById('t-summary');
+  sum.classList.add('shown');
+  sum.innerHTML = `<div class="verdict">${verdict} ${trainerState.correct}/${trainerState.totalQuestions} (${pct}%)</div>${weakHTML}${weakBtn}`;
+}
+
+// Грамматика (не входит в trainerState)
+function checkAns(id, correct) {
+  const el = document.getElementById(id);
+  const fb = document.getElementById(id + '-fb');
+  const val = el.value.trim().toLowerCase().replace(/\s+/g, ' ');
+  if (val === correct.toLowerCase()) {
+    el.classList.add('correct'); el.classList.remove('wrong');
+    fb.className = 'feedback ok'; fb.textContent = '✓ Верно!';
+  } else {
+    el.classList.add('wrong'); el.classList.remove('correct');
+    fb.className = 'feedback err'; fb.textContent = '✗ Правильно: ' + correct;
+  }
+}
+
+function markChoice(btn, isCorrect) {
+  const parent = btn.parentElement;
+  parent.querySelectorAll('.mc-btn').forEach(b => { b.disabled = true; b.style.cursor = 'default'; b.style.opacity = '0.55'; });
+  btn.style.opacity = '1';
+  if (isCorrect) btn.classList.add('correct-choice');
+  else {
+    btn.classList.add('wrong-choice');
+    parent.querySelectorAll('.mc-btn[data-correct="true"]').forEach(b => { b.classList.add('correct-choice'); b.style.opacity = '1'; });
+  }
+}
+</script>
+</body>
+</html>
