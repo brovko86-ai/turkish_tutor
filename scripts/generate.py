@@ -318,43 +318,63 @@ def generate(mode: str) -> int:
     user_message = _build_user_message(today, progress, style, material, note, index)
 
     client = anthropic.Anthropic()
-    # Стриминг обязателен: при max_tokens=32k non-streaming запрос
-    # может превысить 10-минутный лимит SDK. Стрим собираем целиком
-    # перед парсингом.
-    chunks: list[str] = []
-    with client.messages.stream(
-        model=MODEL,
-        max_tokens=MAX_TOKENS,
-        system=[
-            {"type": "text", "text": tutor_prompt},
-            {"type": "text", "text": vocab_spec + "\n\n" + rules},
-        ],
-        messages=[{"role": "user", "content": user_message}],
-    ) as stream:
-        for delta in stream.text_stream:
-            chunks.append(delta)
-    text = "".join(chunks)
-    print(f"[anthropic] получено {len(text)} символов")
+    known = _known_words(progress)
 
-    try:
-        manifest, html = _parse_response(text)
-        # дополнительная проверка: ни одно из 5 новых слов не должно быть
-        # уже знакомо ученику (нет в active/long_term/weak_words)
-        known = _known_words(progress)
-        repeats = [
-            w for w in manifest["new_words"]
+    def _call(extra_user_msg: str = "") -> tuple[dict, str]:
+        """Один вызов API + парсинг. Возвращает (manifest, html) или
+        бросает ValueError при невалидной структуре / повторах."""
+        msg = user_message + (("\n\n" + extra_user_msg) if extra_user_msg else "")
+        chunks: list[str] = []
+        with client.messages.stream(
+            model=MODEL,
+            max_tokens=MAX_TOKENS,
+            system=[
+                {"type": "text", "text": tutor_prompt},
+                {"type": "text", "text": vocab_spec + "\n\n" + rules},
+            ],
+            messages=[{"role": "user", "content": msg}],
+        ) as stream:
+            for delta in stream.text_stream:
+                chunks.append(delta)
+        text = "".join(chunks)
+        print(f"[anthropic] получено {len(text)} символов")
+        m, h = _parse_response(text)
+        reps = [
+            w for w in m["new_words"]
             if w["tr"].strip().lower() in known
         ]
-        if repeats:
+        if reps:
             raise ValueError(
-                f"в new_words {len(repeats)} повтор(ов) уже знакомой лексики: "
-                + ", ".join(f"{w['tr']!r}" for w in repeats)
+                "повтор знакомой лексики: "
+                + ", ".join(f"{w['tr']!r}" for w in reps)
             )
-    except ValueError as exc:
+        return m, h
+
+    # До 2 попыток: при первом провале даём явный «не используй эти слова».
+    # Тема урока могла ограничить пул кандидатов, и модель сама не догадалась
+    # взять менее очевидные варианты.
+    manifest: dict | None = None
+    html: str = ""
+    last_error: str = ""
+    for attempt in (1, 2):
+        try:
+            manifest, html = _call(
+                "" if attempt == 1 else
+                f"⚠️ Предыдущая попытка отклонена: {last_error}. "
+                f"Сгенерируй заново, целиком — с теми же темой и структурой, "
+                f"но **другие 5 слов в `new_words`**, которых **точно нет** в "
+                f"списке уже знакомых ученику слов (см. ЗАПРЕТ выше). Бери "
+                f"менее очевидные варианты, расширяющие словарный запас."
+            )
+            break
+        except ValueError as exc:
+            last_error = str(exc)
+            print(f"[retry] попытка {attempt} провалена: {exc}", file=sys.stderr)
+    if manifest is None:
         common.send_message(
-            f"Тренировка {today}: ошибка валидации ответа модели.\n{exc}"
+            f"Тренировка {today}: после 2 попыток модель так и не дала "
+            f"валидный ответ. Последняя ошибка: {last_error}"
         )
-        print(f"[error] {exc}", file=sys.stderr)
         return 2
 
     common.TRAININGS_DIR.mkdir(parents=True, exist_ok=True)
