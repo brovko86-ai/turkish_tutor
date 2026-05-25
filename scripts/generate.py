@@ -20,7 +20,26 @@ import common
 
 MODEL = os.environ.get("ANTHROPIC_MODEL", "claude-sonnet-4-6")
 MAX_TOKENS = int(os.environ.get("ANTHROPIC_MAX_TOKENS", "32000"))
-NEW_WORDS_PER_DAY = 5
+
+# Сдвиг к словарному запасу: 8 новых слов в день вместо 5 (с 2026-05-25,
+# по запросу ученика — слабое место именно лексика).
+NEW_WORDS_PER_DAY = 8
+
+# Максимум сессий на одну тему. После — `is_new_lesson=true` обязательно.
+# Лечит наблюдавшийся баг «модель крутится на одном уроке 3+ дня».
+MAX_SESSIONS_PER_LESSON = 2
+
+# Сколько ещё не пройденных глаголов из verbs_master_list передавать
+# модели как «приоритетный пул для new_words».
+VERBS_POOL_SIZE = 40
+
+# Сколько weak_words модель обязана задействовать в упражнениях.
+WEAK_WORDS_MIN_USAGE = 4
+
+# Финальный урок курса Cowork. После него — режим expansion (повторение +
+# темы вне исходных материалов). Пока режим обозначается, но переключение
+# поведения будет в следующей итерации.
+LAST_CURRICULUM_LESSON = 32
 
 MANIFEST_RE = re.compile(r"<manifest>\s*(\{.*?\})\s*</manifest>", re.DOTALL)
 HTML_RE = re.compile(r"<html\b.*?</html\s*>", re.DOTALL | re.IGNORECASE)
@@ -138,13 +157,61 @@ def _known_words(progress: dict) -> set[str]:
     return out
 
 
+# verbs_master_list.md → четвёрки строк: No / TR / EN / object suffix.
+# Глагол — латиница, обычно `*mek` или `*mak`, может быть составным
+# (`ara vermek`, `alay etmek`).
+_VERBS_FILE = common.REPO_ROOT / "lesson_materials" / "verbs_master_list.md"
+
+
+def _parse_verbs_master_list() -> list[tuple[str, str, str]]:
+    """Возвращает список (tr, en, object_suffix) из verbs_master_list.md.
+
+    Жёстко привязан к формату, в котором был экспортирован Google Doc:
+    каждая запись = 4 строки, начинающиеся с табуляции (No, tr, en, obj).
+    Парсер тривиальный: ищем последовательные блоки.
+    """
+    if not _VERBS_FILE.exists():
+        return []
+    raw = _VERBS_FILE.read_text(encoding="utf-8")
+    lines = [ln.strip() for ln in raw.splitlines() if ln.strip()]
+    out: list[tuple[str, str, str]] = []
+    i = 0
+    while i < len(lines):
+        # ищем строку — целое число (номер записи)
+        if lines[i].isdigit() and i + 3 < len(lines):
+            tr = lines[i + 1]
+            en = lines[i + 2]
+            obj = lines[i + 3]
+            # глагол валиден если латиница и оканчивается на mek/mak
+            if re.search(r"m[ea]k$", tr) and not tr.startswith("-"):
+                out.append((tr, en, obj))
+            i += 4
+        else:
+            i += 1
+    return out
+
+
+def _verbs_pool(progress: dict, limit: int = VERBS_POOL_SIZE) -> list[tuple[str, str, str]]:
+    """Топ-N глаголов из master list, которые ученик ещё НЕ знает.
+    Передаётся модели как приоритетный пул для new_words."""
+    known = _known_words(progress)
+    all_verbs = _parse_verbs_master_list()
+    unused = [(tr, en, obj) for tr, en, obj in all_verbs
+              if tr.strip().lower() not in known]
+    return unused[:limit]
+
+
 def _build_user_message(today: str, progress: dict, style: str,
                         lesson_material: str, material_note: str,
                         lesson_index: list[tuple[str, str]]) -> str:
     progress_json = json.dumps(progress, ensure_ascii=False, indent=2)
     lesson_title = progress.get("lesson_title", "(не задано)")
     lesson_number = progress.get("current_lesson", "?")
+    session_number = int(progress.get("session_number", 1) or 1)
     known = sorted(_known_words(progress))
+    verbs = _verbs_pool(progress)
+    weak = progress.get("weak_words", []) or []
+    mode = progress.get("mode", "curriculum")
 
     # Жёсткое утверждение про источник темы — первая важная вещь, которую
     # видит модель после даты.
@@ -156,19 +223,95 @@ def _build_user_message(today: str, progress: dict, style: str,
         f"тем же номером урока {lesson_number} лежит что-то иное.\n"
     )
 
-    # Запрет на повторы: все 5 новых слов в манифесте обязаны быть
-    # незнакомыми. Иначе ученик «учит» то, что уже было.
+    # Сдвиг урока: после MAX_SESSIONS_PER_LESSON сессий на одной теме
+    # обязательно переключиться. Сейчас прошлая тренировка имела
+    # `session_number` = N → следующая либо N+1 (если ≤ макс), либо
+    # принудительно новая тема.
+    if session_number >= MAX_SESSIONS_PER_LESSON:
+        session_anchor = (
+            f"\n**ОБЯЗАТЕЛЬНЫЙ ПЕРЕХОД К СЛЕДУЮЩЕМУ УРОКУ:** прошлая "
+            f"тренировка была `session_number={session_number}` по теме "
+            f"«{lesson_title}». Лимит — {MAX_SESSIONS_PER_LESSON} сессии "
+            f"на тему. Поэтому **в манифесте** этой тренировки:\n"
+            f"- `is_new_lesson: true`\n"
+            f"- `lesson_number: {int(lesson_number) + 1}` (или другой "
+            f"  следующий по плану)\n"
+            f"- `lesson_title:` — новая тема\n"
+            f"- `session_number: 1`\n"
+            f"Если ты пытаешься сохранить старую тему — генерация будет "
+            f"отвергнута. Двигаемся вперёд.\n"
+        )
+    else:
+        session_anchor = (
+            f"\nЭто `session_number={session_number + 1}` по теме "
+            f"«{lesson_title}». Можно ещё одна сессия по той же теме "
+            f"(`is_new_lesson: false`) ИЛИ сразу переход на следующий "
+            f"урок (`is_new_lesson: true`), если тема исчерпана.\n"
+        )
+
+    # Запрет на повторы.
     forbidden_block = ""
     if known:
         forbidden_block = (
             f"\n**ЗАПРЕТ НА ПОВТОР ЛЕКСИКИ:** в `manifest.new_words` "
-            f"должно быть 5 турецких слов, которых **нет** в этом списке "
-            f"уже знакомых ученику слов ({len(known)} штук):\n"
+            f"должно быть {NEW_WORDS_PER_DAY} турецких слов, которых "
+            f"**нет** в этом списке уже знакомых ученику слов "
+            f"({len(known)} шт):\n"
             f"```\n{', '.join(known)}\n```\n"
-            f"Эти слова можно использовать в упражнениях и тексте "
-            f"тренировки (для повторения), но они **не должны** попадать "
-            f"в `new_words`. Если ты случайно положишь повтор — генерация "
-            f"будет отвергнута и ученик ничего не получит.\n"
+            f"Их можно (и нужно) использовать в упражнениях и тексте "
+            f"тренировки — но **не** в `new_words`. Любой повтор "
+            f"приведёт к отказу генерации.\n"
+        )
+
+    # Фокус на словарь: приоритетный пул глаголов из ТОП-200.
+    verbs_block = ""
+    if verbs:
+        verbs_lines = "\n".join(
+            f"- `{tr}` — {en}  · упр.: {obj}" for tr, en, obj in verbs
+        )
+        verbs_block = (
+            f"\n**ПРИОРИТЕТНЫЙ ПУЛ ГЛАГОЛОВ (ТОП-200 курса, ещё не "
+            f"пройденные ученику — {len(verbs)} шт):**\n"
+            f"{verbs_lines}\n\n"
+            f"Ученик сейчас активно прокачивает словарный запас "
+            f"(сам обозначил это как слабое место). "
+            f"**Минимум 4 из {NEW_WORDS_PER_DAY} новых слов в манифесте "
+            f"должны быть глаголами из этого пула.** Перевод на русский — "
+            f"твой (английский в подсказке как ориентир). Остальные "
+            f"новые слова — на твой выбор, но тоже желательно из "
+            f"высокочастотной лексики (существительные, прилагательные, "
+            f"наречия), полезной для бытовой речи.\n"
+        )
+
+    # Обязательная ротация weak_words.
+    weak_block = ""
+    if weak:
+        weak_lines = "\n".join(
+            f"- `{w['tr']}` — {w['ru']}  (промахов: {w.get('fails', '?')})"
+            for w in weak
+        )
+        weak_block = (
+            f"\n**ОБЯЗАТЕЛЬНАЯ РАБОТА С weak_words ({len(weak)} шт):**\n"
+            f"{weak_lines}\n\n"
+            f"Это слова, на которых ученик уже ошибался. "
+            f"**Минимум {WEAK_WORDS_MIN_USAGE} из них должны быть "
+            f"задействованы в упражнениях этой тренировки** — особенно "
+            f"в блоке «🧠 Словарный тренажёр» (часть «вставь "
+            f"пропущенное») и в свободной продукции. Без этого "
+            f"закрытия weak_words ученик их не запомнит.\n"
+        )
+
+    # Режим работы. Curriculum — обычный курс. Expansion — после
+    # последнего урока, упор на повторение и новые темы вне Cowork-материалов.
+    mode_block = ""
+    if mode == "expansion":
+        mode_block = (
+            f"\n**РЕЖИМ EXPANSION** (после завершения курса Cowork): "
+            f"новые темы — твой выбор по уровню ученика (каузатив, пассив, "
+            f"плюсквамперфект, косвенная речь, идиомы, частотные сложные "
+            f"конструкции). Активное повторение тем из `completed_lessons` "
+            f"через recall и упражнения. Удвоенный объём словарной "
+            f"практики.\n"
         )
 
     material_block = ""
@@ -190,7 +333,7 @@ def _build_user_message(today: str, progress: dict, style: str,
         )
 
     return f"""Сгенерируй тренировку на сегодня — {today}.
-{topic_anchor}{forbidden_block}
+{topic_anchor}{session_anchor}{mode_block}{forbidden_block}{verbs_block}{weak_block}
 Текущий прогресс ученика (`lesson_progress.json`):
 ```json
 {progress_json}
@@ -220,7 +363,8 @@ def _build_user_message(today: str, progress: dict, style: str,
 
 2. Сразу за ним — полный файл тренировки в блоке `<html>...</html>`
    (валидный самодостаточный HTML со встроенными стилями и скриптами,
-   все 8 блоков из `generation_rules.md`).
+   все 9 блоков из `generation_rules.md` — включая новый блок
+   «🎯 Глагол дня»).
 
 Никакого текста до `<manifest>` и после `</html>`. JSON-манифест должен
 быть валиден и содержать ровно {NEW_WORDS_PER_DAY} новых слов."""
@@ -288,6 +432,12 @@ def _apply_progress(progress: dict, manifest: dict, today: str) -> dict:
             completed.append(manifest["lesson_number"])
         progress["next_lesson"] = manifest["lesson_number"] + 1
 
+    # Авто-переключение в режим expansion после последнего урока курса.
+    if int(manifest["lesson_number"]) > LAST_CURRICULUM_LESSON:
+        progress["mode"] = "expansion"
+    else:
+        progress.setdefault("mode", "curriculum")
+
     return progress
 
 
@@ -347,6 +497,16 @@ def generate(mode: str) -> int:
             raise ValueError(
                 "повтор знакомой лексики: "
                 + ", ".join(f"{w['tr']!r}" for w in reps)
+            )
+        # Защита от «застрял на одной теме»: если прошлая сессия уже была
+        # MAX_SESSIONS_PER_LESSON, новая обязана быть другой темой.
+        prev_session = int(progress.get("session_number", 1) or 1)
+        if prev_session >= MAX_SESSIONS_PER_LESSON and not m.get("is_new_lesson"):
+            raise ValueError(
+                f"тема не сдвинулась: прошлая session={prev_session}, "
+                f"а в манифесте is_new_lesson=false. "
+                f"Должно быть is_new_lesson=true (лимит "
+                f"{MAX_SESSIONS_PER_LESSON} сессий на тему)."
             )
         return m, h
 
