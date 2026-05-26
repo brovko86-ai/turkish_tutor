@@ -211,6 +211,7 @@ def _build_user_message(today: str, progress: dict, style: str,
     known = sorted(_known_words(progress))
     verbs = _verbs_pool(progress)
     weak = progress.get("weak_words", []) or []
+    weak_topics = progress.get("weak_topics", []) or []
     mode = progress.get("mode", "curriculum")
 
     # Жёсткое утверждение про источник темы — первая важная вещь, которую
@@ -283,6 +284,24 @@ def _build_user_message(today: str, progress: dict, style: str,
             f"наречия), полезной для бытовой речи.\n"
         )
 
+    # Приоритет для Recall: слабые темы по результатам диагностического
+    # экзамена. Если есть — первые 2 задачи блока Recall должны быть по
+    # ним. Под капотом — обычный список строк-идентификаторов тем.
+    weak_topics_block = ""
+    if weak_topics:
+        weak_topics_lines = "\n".join(f"- {t}" for t in weak_topics)
+        weak_topics_block = (
+            f"\n**ПРИОРИТЕТ ДЛЯ RECALL — слабые темы по экзамену "
+            f"({len(weak_topics)} шт):**\n"
+            f"{weak_topics_lines}\n\n"
+            f"Это темы, в которых ученик ошибался на диагностическом "
+            f"мини-экзамене. **Минимум 2 из задач блока «⚡ Recall» "
+            f"должны быть по этим темам** — короткие задания "
+            f"(distinguish form, choose suffix, translate phrase). "
+            f"Ротируй темы между тренировками, не повторяй одну и ту же "
+            f"тему две тренировки подряд.\n"
+        )
+
     # Обязательная ротация weak_words.
     weak_block = ""
     if weak:
@@ -333,7 +352,7 @@ def _build_user_message(today: str, progress: dict, style: str,
         )
 
     return f"""Сгенерируй тренировку на сегодня — {today}.
-{topic_anchor}{session_anchor}{mode_block}{forbidden_block}{verbs_block}{weak_block}
+{topic_anchor}{session_anchor}{mode_block}{forbidden_block}{verbs_block}{weak_block}{weak_topics_block}
 Текущий прогресс ученика (`lesson_progress.json`):
 ```json
 {progress_json}
@@ -467,7 +486,9 @@ def generate(mode: str) -> int:
 
     user_message = _build_user_message(today, progress, style, material, note, index)
 
-    client = anthropic.Anthropic()
+    # Раздутый промпт (verbs pool + weak_topics + материалы) может тянуть
+    # ответ дольше дефолтного httpx-таймаута. Поднимаем до 30 минут.
+    client = anthropic.Anthropic(timeout=1800.0)
     known = _known_words(progress)
 
     def _call(extra_user_msg: str = "") -> tuple[dict, str]:
