@@ -1,12 +1,118 @@
-"""Опрос Telegram: ищем команду /today, если есть — запускаем генерацию."""
+"""Опрос Telegram: команды от ученика.
+
+Поддерживаемые команды:
+- `/today`                   — запустить on-demand генерацию тренировки.
+- `/topics <тема1>, <тема2>` — записать слабые темы в weak_topics
+                                (узнаются на диагностическом экзамене).
+- `/learned <слово1> <слово2>` — убрать слова из weak_words
+                                (ученик закрыл их в тренажёре).
+- `/clear topics`            — очистить весь weak_topics.
+- `/clear weak`              — очистить весь weak_words.
+- `/status`                  — текущий прогресс (lesson, sessions, weak counts).
+- `/help`                    — список команд.
+
+Любая команда отправляет короткое подтверждение в Telegram, чтобы было
+видно, что бот её принял.
+"""
 
 from __future__ import annotations
 
 import os
+import re
 import sys
 
 import common
 import generate
+
+
+HELP_TEXT = (
+    "Доступные команды:\n"
+    "  /today — сгенерировать тренировку прямо сейчас\n"
+    "  /topics <тема>, <тема> — записать слабые темы (с экзамена)\n"
+    "  /learned <слово> <слово> — убрать слова из weak_words\n"
+    "  /clear topics — очистить weak_topics\n"
+    "  /clear weak — очистить weak_words\n"
+    "  /status — текущий прогресс\n"
+    "  /help — этот список"
+)
+
+
+def _cmd_topics(args: str) -> str:
+    """`/topics t1, t2, t3` → положить в weak_topics."""
+    topics = [t.strip() for t in args.split(",") if t.strip()]
+    if not topics:
+        return "⚠️ /topics: укажи список тем через запятую."
+    progress = common.load_progress()
+    progress["weak_topics"] = topics
+    common.save_progress(progress)
+    return (
+        f"✅ weak_topics обновлены ({len(topics)} тем). "
+        f"Со следующей тренировки Recall начнёт прицельно бить:\n"
+        + "\n".join(f"  • {t}" for t in topics)
+    )
+
+
+def _cmd_learned(args: str) -> str:
+    """`/learned word1 word2` или `/learned word1, word2` — убрать из weak_words."""
+    raw = [w.strip().lower() for w in re.split(r"[,\s]+", args) if w.strip()]
+    if not raw:
+        return "⚠️ /learned: укажи турецкие слова через пробел или запятую."
+    progress = common.load_progress()
+    weak = progress.get("weak_words", []) or []
+    before = len(weak)
+    target = set(raw)
+    kept = [w for w in weak if (w.get("tr") or "").strip().lower() not in target]
+    removed = before - len(kept)
+    progress["weak_words"] = kept
+    common.save_progress(progress)
+    if removed == 0:
+        return (
+            f"⚠️ Ни одно из присланных слов не было в weak_words. "
+            f"Сейчас там: " + ", ".join((w.get('tr') or '?') for w in weak[:10])
+        )
+    return (
+        f"✅ Убрал {removed} слов из weak_words ({before} → {len(kept)}). "
+        f"Закрытые: {', '.join(sorted(target))}"
+    )
+
+
+def _cmd_clear(args: str) -> str:
+    target = args.strip().lower()
+    progress = common.load_progress()
+    if target == "topics":
+        n = len(progress.get("weak_topics", []) or [])
+        progress["weak_topics"] = []
+        common.save_progress(progress)
+        return f"✅ weak_topics очищены ({n} тем удалено)."
+    if target == "weak":
+        n = len(progress.get("weak_words", []) or [])
+        progress["weak_words"] = []
+        common.save_progress(progress)
+        return f"✅ weak_words очищены ({n} слов удалено)."
+    return "⚠️ /clear: укажи `topics` или `weak`."
+
+
+def _cmd_status(_args: str) -> str:
+    p = common.load_progress()
+    return (
+        f"📊 Текущий прогресс\n"
+        f"Урок: {p.get('current_lesson')} «{p.get('lesson_title')}»\n"
+        f"Session: {p.get('session_number')}, mode: {p.get('mode', 'curriculum')}\n"
+        f"Active (5 свежих слов): "
+        f"{', '.join(w['tr'] for w in p.get('vocabulary_bank',{}).get('active',[]))}\n"
+        f"Long-term: {len(p.get('vocabulary_bank',{}).get('long_term',[]))} слов\n"
+        f"Weak words: {len(p.get('weak_words',[]) or [])}\n"
+        f"Weak topics: {len(p.get('weak_topics',[]) or [])}"
+    )
+
+
+# command → handler. Возвращает текст для отправки в Telegram (или "" если ничего).
+COMMANDS = {
+    "/topics":  _cmd_topics,
+    "/learned": _cmd_learned,
+    "/clear":   _cmd_clear,
+    "/status":  _cmd_status,
+}
 
 
 def main() -> int:
@@ -31,8 +137,29 @@ def main() -> int:
             continue
 
         text = (message.get("text") or "").strip()
+        if not text.startswith("/"):
+            continue
+
+        # /today обрабатываем после всех апдейтов (один запуск генерации).
         if text.split()[:1] == ["/today"]:
             today_requested = True
+            continue
+
+        if text.split()[:1] == ["/help"]:
+            common.send_message(HELP_TEXT)
+            continue
+
+        # /cmd args ...
+        cmd, _, args = text.partition(" ")
+        handler = COMMANDS.get(cmd.lower())
+        if handler:
+            try:
+                reply = handler(args)
+                common.send_message(reply)
+                print(f"[poll] {cmd}: {reply[:80]}")
+            except Exception as exc:
+                common.send_message(f"⚠️ {cmd} упал: {exc}")
+                print(f"[poll] {cmd} error: {exc}", file=sys.stderr)
 
     common.save_offset(max_update_id + 1)
 

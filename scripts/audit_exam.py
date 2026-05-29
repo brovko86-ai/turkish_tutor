@@ -9,7 +9,7 @@
   ~3–5 минут без таймаутов.
 - Склеивает их в один самодостаточный HTML с общим JS-движком: подсчёт
   правильных, сводка по темам в конце (🟢🟡🔴) и копируемая команда
-  `/weak ...` для бота.
+  `/topics ...` для бота.
 - Сохраняет в `audits/exam_YYYY-MM-DD.html` и отправляет в Telegram.
 
 После прохождения ученик присылает в чат список слабых тем — они
@@ -390,7 +390,7 @@ def _build_full_html(parts_questions: list[tuple[str, str]], today: str) -> str:
 
     const weak = rows.filter(r => r.score < 0.8).map(r => r.topic);
     const cmd = weak.length
-      ? '/weak ' + weak.join(', ')
+      ? '/topics ' + weak.join(', ')
       : 'Все темы зелёные! 🎉  Скажи мне просто «всё ок».';
     document.getElementById('weak-cmd').textContent = cmd;
 
