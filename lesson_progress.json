@@ -1805,5 +1805,19 @@
     }
   ],
   "_weak_words_doc": "Список слов, на которых пользователь чаще ошибается. Заполняется через /weak в боте или из summary словарного тренажёра. Будущие тренировки и /drill ОБЯЗАНЫ включать эти слова приоритетно. После 2 правильных ответов подряд слово удаляется из списка.",
-  "mode": "expansion"
+  "mode": "expansion",
+  "weak_topics": [
+    "instrumental -le/-la",
+    "demonstratives bu/şu/o",
+    "imperative",
+    "çünkü / -diği için",
+    "-deki",
+    "-arak/-erek",
+    "-EN/-AN relative",
+    "FSTKÇŞHP",
+    "question words ne/kim/nerede",
+    "telling time saat",
+    "future -EcEK",
+    "nominal predicate değil"
+  ]
 }
