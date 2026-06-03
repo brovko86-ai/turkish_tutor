@@ -28,8 +28,9 @@ import generate
 HELP_TEXT = (
     "Доступные команды:\n"
     "  /today — сгенерировать тренировку прямо сейчас\n"
-    "  /topics <тема>, <тема> — записать слабые темы (с экзамена)\n"
+    "  /weak <слово> <слово> — добавить турецкие слова в weak_words\n"
     "  /learned <слово> <слово> — убрать слова из weak_words\n"
+    "  /topics <тема>, <тема> — записать слабые темы (с экзамена)\n"
     "  /clear topics — очистить weak_topics\n"
     "  /clear weak — очистить weak_words\n"
     "  /status — текущий прогресс\n"
@@ -50,6 +51,52 @@ def _cmd_topics(args: str) -> str:
         f"Со следующей тренировки Recall начнёт прицельно бить:\n"
         + "\n".join(f"  • {t}" for t in topics)
     )
+
+
+def _cmd_weak(args: str) -> str:
+    """`/weak word1 word2` или `/weak word1, word2` — добавить в weak_words.
+    Совместимо со старой семантикой бота: ученик отмечает, что эти слова
+    забывает. Перевод модель подставит сама на следующей тренировке
+    (берём ru из active/long_term, если есть; иначе оставляем пустой).
+    Дубли не создаём."""
+    raw = [w.strip() for w in re.split(r"[,\s]+", args) if w.strip()]
+    if not raw:
+        return "⚠️ /weak: укажи турецкие слова через пробел или запятую."
+    progress = common.load_progress()
+    weak = progress.get("weak_words", []) or []
+    existing = {(w.get("tr") or "").strip().lower() for w in weak}
+    # ищем перевод в active/long_term
+    bank = progress.get("vocabulary_bank", {}) or {}
+    all_known = (bank.get("active", []) or []) + (bank.get("long_term", []) or [])
+    ru_by_tr = {(w.get("tr") or "").strip().lower(): w.get("ru", "")
+                for w in all_known if w.get("tr")}
+
+    added = []
+    skipped = []
+    today = common.today_str()
+    for w in raw:
+        key = w.lower()
+        if key in existing:
+            skipped.append(w)
+            continue
+        weak.append({
+            "tr": w,
+            "ru": ru_by_tr.get(key, ""),
+            "added": today,
+            "fails": 1,
+        })
+        existing.add(key)
+        added.append(w)
+
+    progress["weak_words"] = weak
+    common.save_progress(progress)
+    parts = []
+    if added:
+        parts.append(f"✅ Добавил {len(added)} в weak_words: {', '.join(added)}")
+    if skipped:
+        parts.append(f"⏭ Уже были в weak_words: {', '.join(skipped)}")
+    parts.append(f"Всего сейчас: {len(weak)} weak_words.")
+    return "\n".join(parts)
 
 
 def _cmd_learned(args: str) -> str:
@@ -108,8 +155,9 @@ def _cmd_status(_args: str) -> str:
 
 # command → handler. Возвращает текст для отправки в Telegram (или "" если ничего).
 COMMANDS = {
-    "/topics":  _cmd_topics,
+    "/weak":    _cmd_weak,
     "/learned": _cmd_learned,
+    "/topics":  _cmd_topics,
     "/clear":   _cmd_clear,
     "/status":  _cmd_status,
 }

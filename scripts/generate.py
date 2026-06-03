@@ -214,6 +214,24 @@ def _build_user_message(today: str, progress: dict, style: str,
     weak_topics = progress.get("weak_topics", []) or []
     mode = progress.get("mode", "curriculum")
 
+    # Качество упражнений: рандомизация MC + правильные hint'ы.
+    # Это часто нарушается, поэтому повторяем явно в каждом user_message.
+    quality_block = (
+        "\n**КАЧЕСТВО УПРАЖНЕНИЙ (часто нарушается, перечитай):**\n"
+        "- В **multiple-choice** вариантов: правильный ответ **не "
+        "должен быть на первом месте** (это смещение — ученик угадывает "
+        "без понимания). Распределяй позицию правильного варианта "
+        "равномерно по 1–4. Дополнительно в конце `<body>` добавь JS, "
+        "который при загрузке перемешивает кнопки внутри каждого "
+        "`.mc-options` (см. `generation_rules.md` §7a — там готовый "
+        "snippet).\n"
+        "- **Подсказка (`hint`) НИКОГДА не содержит сам ответ или его "
+        "части.** Только грамматическое правило или перевод нового "
+        "слова. Если задание — вставить `gittim`, hint описывает "
+        "правило (`-DI` past + личное окончание `-m`, корень `git`), "
+        "но **не называет** `gittim` ни одной буквой.\n"
+    )
+
     # Жёсткое утверждение про источник темы — первая важная вещь, которую
     # видит модель после даты.
     topic_anchor = (
@@ -360,7 +378,7 @@ def _build_user_message(today: str, progress: dict, style: str,
         )
 
     return f"""Сгенерируй тренировку на сегодня — {today}.
-{topic_anchor}{session_anchor}{mode_block}{forbidden_block}{verbs_block}{weak_block}{weak_topics_block}
+{quality_block}{topic_anchor}{session_anchor}{mode_block}{forbidden_block}{verbs_block}{weak_block}{weak_topics_block}
 Текущий прогресс ученика (`lesson_progress.json`):
 ```json
 {progress_json}
