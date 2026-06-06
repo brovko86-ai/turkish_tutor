@@ -2157,39 +2157,11 @@
       "last_failed": "2026-04-30"
     },
     {
-      "tr": "açıklamak",
-      "ru": "объяснять",
-      "added": "2026-05-01",
-      "fails": 2,
-      "last_failed": "2026-05-22"
-    },
-    {
-      "tr": "yüzünden",
-      "ru": "из-за (-ın yüzünden, негатив)",
-      "added": "2026-05-01",
-      "fails": 1,
-      "last_failed": "2026-05-01"
-    },
-    {
       "tr": "dolayı",
       "ru": "из-за (-den dolayı)",
       "added": "2026-05-01",
       "fails": 1,
       "last_failed": "2026-05-01"
-    },
-    {
-      "tr": "tanıdık",
-      "ru": "знакомый (человек/лицо)",
-      "added": "2026-05-22",
-      "fails": 1,
-      "last_failed": "2026-05-22"
-    },
-    {
-      "tr": "bulmak",
-      "ru": "находить",
-      "added": "2026-05-22",
-      "fails": 1,
-      "last_failed": "2026-05-22"
     },
     {
       "tr": "tanımak",
