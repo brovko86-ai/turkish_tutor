@@ -214,22 +214,30 @@ def _build_user_message(today: str, progress: dict, style: str,
     weak_topics = progress.get("weak_topics", []) or []
     mode = progress.get("mode", "curriculum")
 
-    # Качество упражнений: рандомизация MC + правильные hint'ы.
-    # Это часто нарушается, поэтому повторяем явно в каждом user_message.
+    # Качество упражнений: рандомизация MC + правильные hint'ы +
+    # корректные пары в matching. Это часто нарушается, поэтому повторяем
+    # явно в каждом user_message.
     quality_block = (
         "\n**КАЧЕСТВО УПРАЖНЕНИЙ (часто нарушается, перечитай):**\n"
-        "- В **multiple-choice** вариантов: правильный ответ **не "
-        "должен быть на первом месте** (это смещение — ученик угадывает "
-        "без понимания). Распределяй позицию правильного варианта "
-        "равномерно по 1–4. Дополнительно в конце `<body>` добавь JS, "
-        "который при загрузке перемешивает кнопки внутри каждого "
-        "`.mc-options` (см. `generation_rules.md` §7a — там готовый "
-        "snippet).\n"
+        "- В **multiple-choice**: правильный ответ **не должен быть на "
+        "первом месте**. Распределяй позицию правильного варианта "
+        "равномерно по 1–4. Плюс в конце `<body>` добавь JS-shuffle "
+        "`.mc-options` (snippet в `generation_rules.md` §7a).\n"
         "- **Подсказка (`hint`) НИКОГДА не содержит сам ответ или его "
         "части.** Только грамматическое правило или перевод нового "
         "слова. Если задание — вставить `gittim`, hint описывает "
         "правило (`-DI` past + личное окончание `-m`, корень `git`), "
         "но **не называет** `gittim` ни одной буквой.\n"
+        "- **Matching (Сопоставь пары)**: КРИТИЧЕСКИ важная зона. "
+        "Сперва на черновике выпиши 12 СЕМАНТИЧЕСКИ правильных пар "
+        "(tr ↔ ru) опираясь на `vocabulary_bank`. Только потом ставь "
+        "`data-id` так, чтобы tr и его правильный ru имели один и тот "
+        "же id. Перед выводом мысленно пройди по всем парам и сверь "
+        "корректность. Не дублируй ru-карточки (никаких двух "
+        "«тратить» — один из них почти наверняка не тот, что нужен). "
+        "Прошлая тренировка 2026-06-10 содержала 6 ошибок из 12 пар: "
+        "`önermek`↔«праздновать» и т.п. — это полностью обесценивает "
+        "упражнение.\n"
     )
 
     # Жёсткое утверждение про источник темы — первая важная вещь, которую
@@ -415,6 +423,91 @@ def _build_user_message(today: str, progress: dict, style: str,
 быть валиден и содержать ровно {NEW_WORDS_PER_DAY} новых слов."""
 
 
+_MATCH_CARD_RE = re.compile(
+    r'<div[^>]*class="[^"]*match-card[^"]*"[^>]*>([^<]+)</div>',
+    re.IGNORECASE,
+)
+_ATTR_RE = re.compile(r'(\w[\w-]*)\s*=\s*"([^"]*)"')
+_RU_TOKEN_RE = re.compile(r"[а-яёa-z]{4,}", re.IGNORECASE)
+
+
+def _ru_tokens(text: str) -> set[str]:
+    """Множество значимых русских (или английских) слов из перевода."""
+    return {m.lower() for m in _RU_TOKEN_RE.findall(text or "")}
+
+
+def _check_matching_pairs(html: str, progress: dict,
+                          manifest: dict) -> list[str]:
+    """Возвращает список ошибок в matching-блоке (Сопоставь пары).
+
+    Парсит все `match-card` с `data-id` и `data-side`, группирует по
+    id, для каждой пары (tr, ru) сверяет ru с известным переводом
+    из vocabulary_bank / weak_words / new_words.
+    Возвращает человекочитаемые описания несоответствий.
+    """
+    # достаём ту самую секцию с card'ами
+    bank = progress.get("vocabulary_bank", {}) or {}
+    known: dict[str, set[str]] = {}
+    for bucket in (bank.get("active", []), bank.get("long_term", [])):
+        for w in bucket or []:
+            tr = (w.get("tr") or "").strip().lower()
+            if tr:
+                known.setdefault(tr, set()).update(_ru_tokens(w.get("ru", "")))
+    for w in progress.get("weak_words", []) or []:
+        tr = (w.get("tr") or "").strip().lower()
+        if tr:
+            known.setdefault(tr, set()).update(_ru_tokens(w.get("ru", "")))
+    for w in manifest.get("new_words", []) or []:
+        tr = (w.get("tr") or "").strip().lower()
+        if tr:
+            known.setdefault(tr, set()).update(_ru_tokens(w.get("ru", "")))
+
+    # парсим карточки: для каждой собираем data-id, data-side, текст
+    cards: dict[str, dict[str, str]] = {}  # id -> {"tr": text, "ru": text}
+    for m in re.finditer(
+        r'<div\s+([^>]*?class="[^"]*match-card[^"]*"[^>]*)>([^<]+)</div>',
+        html, re.IGNORECASE,
+    ):
+        attrs = dict(_ATTR_RE.findall(m.group(1)))
+        did = attrs.get("data-id")
+        side = (attrs.get("data-side") or "").lower()
+        text = m.group(2).strip()
+        if did and side in ("tr", "ru"):
+            cards.setdefault(did, {})[side] = text
+
+    errors: list[str] = []
+    seen_ru: dict[str, str] = {}  # нормализованный ru → id
+    for did, pair in cards.items():
+        tr = (pair.get("tr") or "").strip()
+        ru = (pair.get("ru") or "").strip()
+        if not tr or not ru:
+            errors.append(f"data-id={did}: неполная пара (tr={tr!r}, ru={ru!r})")
+            continue
+
+        # дубликаты ru-карточек — индикатор путаницы
+        ru_key = ru.lower()
+        if ru_key in seen_ru and seen_ru[ru_key] != did:
+            errors.append(
+                f"data-id={did}: ru-карточка «{ru}» дублирует "
+                f"data-id={seen_ru[ru_key]}"
+            )
+        seen_ru[ru_key] = did
+
+        # сверка с словарём
+        tr_lower = tr.lower()
+        if tr_lower not in known:
+            continue  # слова нет в нашем банке, не можем проверить
+        expected = known[tr_lower]
+        actual = _ru_tokens(ru)
+        if expected and not (expected & actual):
+            errors.append(
+                f"data-id={did}: tr=«{tr}» ↔ ru=«{ru}» — перевод не "
+                f"совпадает с банком (ожидаются токены: "
+                f"{', '.join(sorted(expected))})"
+            )
+    return errors
+
+
 def _parse_response(text: str) -> tuple[dict, str]:
     m_manifest = MANIFEST_RE.search(text)
     if not m_manifest:
@@ -544,6 +637,16 @@ def generate(mode: str) -> int:
             raise ValueError(
                 "повтор знакомой лексики: "
                 + ", ".join(f"{w['tr']!r}" for w in reps)
+            )
+        # Валидация matching-пар: парсер ищет matching-карточки и сверяет
+        # tr ↔ ru через vocabulary_bank. Любое несовпадение → retry.
+        matching_errors = _check_matching_pairs(h, progress, m)
+        if matching_errors:
+            raise ValueError(
+                f"в matching {len(matching_errors)} семантических ошибок:\n  "
+                + "\n  ".join(matching_errors[:5])
+                + (f"\n  …и ещё {len(matching_errors) - 5}"
+                   if len(matching_errors) > 5 else "")
             )
         # Защита от «застрял на одной теме»: если прошлая сессия уже была
         # MAX_SESSIONS_PER_LESSON, новая обязана быть другой темой.
