@@ -232,6 +232,11 @@ def _build_user_message(today: str, progress: dict, style: str,
         "слова. Если задание — вставить `gittim`, hint описывает "
         "правило (`-DI` past + личное окончание `-m`, корень `git`), "
         "но **не называет** `gittim` ни одной буквой.\n"
+        "- **Правильные ответы в `checkInput(...)` и `data-correct=` "
+        "не должны содержать опечаток.** Проверяй каждое слово "
+        "побуквенно. В 2026-06-11 был `toplatttı` (3 t) вместо "
+        "`toplattı` (2 t) — это критическая опечатка в самом эталоне. "
+        "В турецком три одинаковые буквы подряд **невозможны**.\n"
         "- **Matching (Сопоставь пары)**: КРИТИЧЕСКИ важная зона. "
         "Сперва на черновике выпиши 12 СЕМАНТИЧЕСКИ правильных пар "
         "(tr ↔ ru) опираясь на `vocabulary_bank`. Только потом ставь "
@@ -512,6 +517,54 @@ def _check_matching_pairs(html: str, progress: dict,
     return errors
 
 
+# `checkInput('id', 'answer', 'feedback_id')` — fill-in упражнения.
+# Иногда варианты через `|`. Допускаем '...' и "...".
+_CHECK_INPUT_RE = re.compile(
+    r"""checkInput\(\s*['"][^'"]*['"]\s*,\s*['"]([^'"]+)['"]""",
+    re.IGNORECASE,
+)
+# Турецкие буквы. Слова длиннее ≥3, иначе false positives (HTML, JS).
+_TR_WORD_RE = re.compile(r"[a-zçğıöşüâîû]{3,}", re.IGNORECASE)
+# Три одинаковые буквы подряд — в турецком практически невозможно
+# (правильный `toplattı`, опечатка `toplatttı`).
+_TRIPLE_LETTER_RE = re.compile(r"(.)\1\1", re.IGNORECASE)
+
+
+def _check_correct_answers(html: str) -> list[str]:
+    """Ищет в правильных ответах (`checkInput(...)`, `data-correct="..."`)
+    слова с 3+ одинаковыми буквами подряд — это орфографическая опечатка
+    модели, не реальное турецкое слово.
+    """
+    errors: list[str] = []
+    candidates: list[str] = []
+    # из checkInput
+    for m in _CHECK_INPUT_RE.finditer(html):
+        # ответ может быть `gittim|Gittim` — разбиваем
+        candidates.extend(p.strip() for p in m.group(1).split("|") if p.strip())
+    # из data-correct="..." (только не true/false)
+    for m in re.finditer(r'data-correct="([^"]+)"', html):
+        val = m.group(1).strip()
+        if val.lower() in ("true", "false", "1", "0", "yes", "no"):
+            continue
+        candidates.extend(p.strip() for p in val.split("|") if p.strip())
+
+    seen: set[str] = set()
+    for ans in candidates:
+        if ans in seen:
+            continue
+        seen.add(ans)
+        for word in _TR_WORD_RE.findall(ans):
+            tm = _TRIPLE_LETTER_RE.search(word)
+            if tm:
+                errors.append(
+                    f"правильный ответ «{ans}» содержит слово «{word}» с "
+                    f"3 одинаковыми буквами подряд («{tm.group(0)}») — "
+                    f"это опечатка, в турецком таких слов нет"
+                )
+                break
+    return errors
+
+
 _MC_OPTIONS_RE = re.compile(
     r'<div[^>]*class="[^"]*mc-options[^"]*"[^>]*>(.*?)</div>',
     re.IGNORECASE | re.DOTALL,
@@ -726,6 +779,16 @@ def generate(mode: str) -> int:
                 + "\n  ".join(mc_errors[:5])
                 + (f"\n  …и ещё {len(mc_errors) - 5}"
                    if len(mc_errors) > 5 else "")
+            )
+        # Валидация правильных ответов: опечатки с XXX (3 одинаковые
+        # буквы подряд) — в 2026-06-11 был toplatttı (3t) вместо toplattı.
+        spelling_errors = _check_correct_answers(h)
+        if spelling_errors:
+            raise ValueError(
+                f"в правильных ответах {len(spelling_errors)} опечаток:\n  "
+                + "\n  ".join(spelling_errors[:5])
+                + (f"\n  …и ещё {len(spelling_errors) - 5}"
+                   if len(spelling_errors) > 5 else "")
             )
         # Защита от «застрял на одной теме»: если прошлая сессия уже была
         # MAX_SESSIONS_PER_LESSON, новая обязана быть другой темой.
