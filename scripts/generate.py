@@ -222,7 +222,11 @@ def _build_user_message(today: str, progress: dict, style: str,
         "- В **multiple-choice**: правильный ответ **не должен быть на "
         "первом месте**. Распределяй позицию правильного варианта "
         "равномерно по 1–4. Плюс в конце `<body>` добавь JS-shuffle "
-        "`.mc-options` (snippet в `generation_rules.md` §7a).\n"
+        "`.mc-options` (snippet в `generation_rules.md` §7a). **Все 4 "
+        "варианта должны быть ТЕКСТУАЛЬНО УНИКАЛЬНЫ**, никаких двух "
+        "одинаковых строк (в 2026-06-10 было `koşarak geldi` дважды, "
+        "одна красная, одна зелёная — это бессмыслица). И ровно одна "
+        "кнопка имеет `data-correct=\"true\"`.\n"
         "- **Подсказка (`hint`) НИКОГДА не содержит сам ответ или его "
         "части.** Только грамматическое правило или перевод нового "
         "слова. Если задание — вставить `gittim`, hint описывает "
@@ -508,6 +512,70 @@ def _check_matching_pairs(html: str, progress: dict,
     return errors
 
 
+_MC_OPTIONS_RE = re.compile(
+    r'<div[^>]*class="[^"]*mc-options[^"]*"[^>]*>(.*?)</div>',
+    re.IGNORECASE | re.DOTALL,
+)
+_MC_BTN_RE = re.compile(
+    r'<button[^>]*class="[^"]*mc-btn[^"]*"([^>]*)>([^<]+)</button>',
+    re.IGNORECASE,
+)
+
+
+def _check_mc_options(html: str) -> list[str]:
+    """Проверяет каждый .mc-options блок:
+
+    - тексты кнопок должны быть уникальны внутри блока;
+    - ровно одна кнопка должна иметь data-correct="true" (или иной
+      аналог: data-correct, без =true; либо отсутствие — тогда правильный
+      ответ должен помечаться по data-correct внутри .mc-options).
+    Возвращает список ошибок для retry.
+    """
+    errors: list[str] = []
+    for i, m in enumerate(_MC_OPTIONS_RE.finditer(html), start=1):
+        block = m.group(1)
+        btns = _MC_BTN_RE.findall(block)
+        if not btns:
+            continue
+        texts = [t.strip() for _, t in btns]
+
+        # 1. дубли текста
+        seen: dict[str, int] = {}
+        for t in texts:
+            seen[t] = seen.get(t, 0) + 1
+        dups = [t for t, c in seen.items() if c > 1]
+        if dups:
+            errors.append(
+                f"mc-options #{i}: дубли вариантов "
+                + ", ".join(f"«{t}»×{seen[t]}" for t in dups)
+                + f" (всего кнопок: {len(texts)})"
+            )
+
+        # 2. ровно один data-correct=true
+        attrs_per_btn = [dict(_ATTR_RE.findall(a)) for a, _ in btns]
+        correct_flags = [
+            (a.get("data-correct") or "").strip().lower() in ("true", "1", "yes")
+            for a in attrs_per_btn
+        ]
+        n_correct = sum(correct_flags)
+        # альтернативный механизм: data-correct у самого .mc-options
+        if n_correct == 0:
+            # ищем data-correct=... в самом mc-options-теге
+            opts_attrs = dict(_ATTR_RE.findall(
+                html[m.start():m.start() + html[m.start():].find('>')]
+            ))
+            if not opts_attrs.get("data-correct"):
+                errors.append(
+                    f"mc-options #{i}: нет правильного ответа "
+                    f"(ни одной data-correct=true и нет data-correct у блока)"
+                )
+        elif n_correct > 1:
+            errors.append(
+                f"mc-options #{i}: правильных ответов {n_correct}, должен быть 1"
+            )
+    return errors
+
+
 def _parse_response(text: str) -> tuple[dict, str]:
     m_manifest = MANIFEST_RE.search(text)
     if not m_manifest:
@@ -647,6 +715,17 @@ def generate(mode: str) -> int:
                 + "\n  ".join(matching_errors[:5])
                 + (f"\n  …и ещё {len(matching_errors) - 5}"
                    if len(matching_errors) > 5 else "")
+            )
+        # Валидация multiple-choice: уникальность кнопок + ровно один
+        # data-correct=true. Прошлая тренировка имела два «koşarak geldi»,
+        # один false, второй true — ученик не мог их различить.
+        mc_errors = _check_mc_options(h)
+        if mc_errors:
+            raise ValueError(
+                f"в multiple-choice {len(mc_errors)} проблем:\n  "
+                + "\n  ".join(mc_errors[:5])
+                + (f"\n  …и ещё {len(mc_errors) - 5}"
+                   if len(mc_errors) > 5 else "")
             )
         # Защита от «застрял на одной теме»: если прошлая сессия уже была
         # MAX_SESSIONS_PER_LESSON, новая обязана быть другой темой.
