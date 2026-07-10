@@ -163,6 +163,59 @@ def _known_words(progress: dict) -> set[str]:
 _VERBS_FILE = common.REPO_ROOT / "lesson_materials" / "verbs_master_list.md"
 
 
+# Расширенный fallback-пул: B2/C1 глаголы вне ТОП-200 Cowork-курса.
+# Активируется когда verbs_master_list исчерпан (у ученика в long_term
+# уже все ТОП-200 глаголов). Разные семантические поля: эмоции,
+# общение, работа, наука, отношения, повседневность. Object suffix
+# указан там, где принципиален.
+_EXTRA_VERBS_B2: list[tuple[str, str, str]] = [
+    # эмоции / внутренние состояния
+    ("özlemek",       "to miss / to long for",              "-ı, -i"),
+    ("pişman olmak",  "to regret",                          "-a, -e"),
+    ("gurur duymak",  "to be proud of",                     "-la"),
+    ("hayret etmek",  "to be amazed / astonished",          "-a, -e"),
+    ("sıkılmak",      "to get bored",                       "-dan, -den"),
+    ("rahatsız olmak","to feel uncomfortable",              "-dan, -den"),
+    # коммуникация / убеждение
+    ("ikna etmek",    "to persuade / convince",             "-ı, -i"),
+    ("itiraz etmek",  "to object / protest",                "-a, -e"),
+    ("belirtmek",     "to state / indicate",                "-ı, -i"),
+    ("vurgulamak",    "to emphasise",                       "-ı, -i"),
+    ("özetlemek",     "to summarise",                       "-ı, -i"),
+    ("yorumlamak",    "to comment / interpret",             "-ı, -i"),
+    # работа / принятие решений
+    ("planlamak",     "to plan",                            "-ı, -i"),
+    ("başvurmak",     "to apply for / consult",             "-a, -e"),
+    ("üstlenmek",     "to take on / undertake",             "-ı, -i"),
+    ("gerçekleştirmek","to realise / carry out",            "-ı, -i"),
+    ("hedeflemek",    "to aim / target",                    "-ı, -i"),
+    ("değerlendirmek","to evaluate / assess",               "-ı, -i"),
+    # мышление / знание
+    ("varsaymak",     "to assume",                          "-ı, -i"),
+    ("çıkarmak",      "to infer / deduce",                  "-ı, -i"),
+    ("sezmek",        "to sense / perceive",                "-ı, -i"),
+    ("kavramak",      "to grasp / comprehend",              "-ı, -i"),
+    ("keşfetmek",     "to discover",                        "-ı, -i"),
+    # отношения / социальное
+    ("tanıştırmak",   "to introduce (someone to)",          "-la"),
+    ("davet etmek",   "to invite",                          "-ı, -i"),
+    ("desteklemek",   "to support",                         "-ı, -i"),
+    ("kıskanmak",     "to envy / be jealous of",            "-ı, -i"),
+    ("affetmek",      "to forgive",                         "-ı, -i"),
+    # действие / физика
+    ("kaydetmek",     "to record / save",                   "-ı, -i"),
+    ("silmek",        "to erase / wipe",                    "-ı, -i"),
+    ("bağlamak",      "to tie / connect",                   "-a, -e"),
+    ("çözmek",        "to solve / untie",                   "-ı, -i"),
+    ("değiştirmek",   "to change",                          "-ı, -i"),
+    # уровень C1 — редкие но полезные
+    ("çekinmek",      "to hesitate / abstain",              "-dan, -den"),
+    ("dayanmak",      "to endure / lean on",                "-a, -e"),
+    ("yansımak",      "to be reflected",                    "-a, -e"),
+    ("yer almak",     "to take place / be included",        "-da, -de"),
+]
+
+
 def _parse_verbs_master_list() -> list[tuple[str, str, str]]:
     """Возвращает список (tr, en, object_suffix) из verbs_master_list.md.
 
@@ -192,13 +245,23 @@ def _parse_verbs_master_list() -> list[tuple[str, str, str]]:
 
 
 def _verbs_pool(progress: dict, limit: int = VERBS_POOL_SIZE) -> list[tuple[str, str, str]]:
-    """Топ-N глаголов из master list, которые ученик ещё НЕ знает.
-    Передаётся модели как приоритетный пул для new_words."""
+    """Топ-N глаголов, которые ученик ещё НЕ знает. Сначала берём из
+    verbs_master_list (ТОП-200 Cowork), потом добираем из встроенного
+    B2/C1 fallback-списка. Передаётся модели как приоритетный пул для
+    new_words."""
     known = _known_words(progress)
-    all_verbs = _parse_verbs_master_list()
-    unused = [(tr, en, obj) for tr, en, obj in all_verbs
-              if tr.strip().lower() not in known]
-    return unused[:limit]
+    result: list[tuple[str, str, str]] = []
+    seen: set[str] = set()
+    for source in (_parse_verbs_master_list(), _EXTRA_VERBS_B2):
+        for tr, en, obj in source:
+            key = tr.strip().lower()
+            if key in known or key in seen:
+                continue
+            seen.add(key)
+            result.append((tr, en, obj))
+            if len(result) >= limit:
+                return result
+    return result
 
 
 def _build_user_message(today: str, progress: dict, style: str,
