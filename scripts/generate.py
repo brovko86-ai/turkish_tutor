@@ -909,6 +909,24 @@ def generate(mode: str) -> int:
         except ValueError as exc:
             last_error = str(exc)
             print(f"[retry] попытка {attempt} провалена: {exc}", file=sys.stderr)
+        except (anthropic.APIConnectionError, anthropic.APITimeoutError) as exc:
+            # Сетевые сбои Anthropic: peer closed / read timeout / DNS.
+            # Не наша логика — просто ретраим.
+            last_error = f"сеть/Anthropic: {exc}"
+            print(f"[retry] попытка {attempt} сетевой сбой: {exc}",
+                  file=sys.stderr)
+        except Exception as exc:  # noqa: BLE001
+            # http-уровневые исключения (httpx.RemoteProtocolError,
+            # httpx.ReadTimeout и т.п.) — SDK иногда не оборачивает.
+            # Ретраим только известные сетевые классы.
+            name = type(exc).__name__
+            if any(x in name for x in ("Timeout", "Connection", "Protocol",
+                                        "Read", "Network")):
+                last_error = f"сеть ({name}): {exc}"
+                print(f"[retry] попытка {attempt} сеть ({name}): {exc}",
+                      file=sys.stderr)
+            else:
+                raise
     if manifest is None:
         common.send_message(
             f"Тренировка {today}: после 2 попыток модель так и не дала "
