@@ -181,10 +181,16 @@ def _call_part(client: anthropic.Anthropic, system_blocks: list[dict], user_msg:
                part_name: str) -> str:
     """Вызвать API и вернуть содержимое <questions>."""
     chunks: list[str] = []
+    # cache_control на system: между двумя частями экзамена (~5 мин)
+    # получаем cache hit на второй вызов.
+    cached_system = [
+        {**b, "cache_control": {"type": "ephemeral"}}
+        for b in system_blocks
+    ]
     with client.messages.stream(
         model=gen.MODEL,
         max_tokens=gen.MAX_TOKENS,
-        system=system_blocks,
+        system=cached_system,
         messages=[{"role": "user", "content": user_msg}],
     ) as stream:
         for delta in stream.text_stream:

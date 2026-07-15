@@ -50,17 +50,21 @@ def _read(path: Path) -> str:
 
 
 def _style_sample() -> str:
-    """Краткая выжимка стиля: ссылка на последнюю тренировку как образец.
-
-    Передаём только последний файл и обрезаем его до разумного размера,
-    чтобы не раздувать контекст.
+    """Краткая выжимка стиля: только `<head>` и первый `<section>`
+    последней тренировки. Этого хватает модели, чтобы понять CSS-каркас
+    и палитру. Полный HTML раньше был 8000 симв (~2k tokens); сейчас
+    ~2500 симв (~600 tokens) — экономия ~1.5k input tokens/вызов.
     """
     sample = common.latest_training()
     if sample is None:
         return "(образцов предыдущих тренировок ещё нет)"
     text = sample.read_text(encoding="utf-8")
-    # Достаточно первых ~8000 символов: модель видит структуру и тон.
-    return f"Файл: {sample.name}\n\n{text[:8000]}"
+    # берём до первого закрытия section (плюс запас) — там уже видно
+    # заголовок, CSS-переменные, структуру блока.
+    cut = text.find("</section>")
+    if cut > 0:
+        text = text[: cut + len("</section>")]
+    return f"Файл: {sample.name}\n\n{text[:2500]}"
 
 
 def _lesson_index() -> list[tuple[str, str]]:
@@ -264,10 +268,23 @@ def _verbs_pool(progress: dict, limit: int = VERBS_POOL_SIZE) -> list[tuple[str,
     return result
 
 
+def _compact_progress(progress: dict) -> dict:
+    """Копия progress с обрезанным long_term (модель этот массив не
+    использует, но он тянет ~14k input tokens). Оставляем только счётчик
+    и последние 10 слов как sample. Всё остальное — как есть."""
+    bank = progress.get("vocabulary_bank", {}) or {}
+    long_term = bank.get("long_term", []) or []
+    compact = dict(progress)
+    compact_bank = dict(bank)
+    compact_bank["long_term"] = f"(list of {len(long_term)} words, omitted for brevity)"
+    compact["vocabulary_bank"] = compact_bank
+    return compact
+
+
 def _build_user_message(today: str, progress: dict, style: str,
                         lesson_material: str, material_note: str,
                         lesson_index: list[tuple[str, str]]) -> str:
-    progress_json = json.dumps(progress, ensure_ascii=False, indent=2)
+    progress_json = json.dumps(_compact_progress(progress), ensure_ascii=False, indent=2)
     lesson_title = progress.get("lesson_title", "(не задано)")
     lesson_number = progress.get("current_lesson", "?")
     session_number = int(progress.get("session_number", 1) or 1)
@@ -449,8 +466,14 @@ def _build_user_message(today: str, progress: dict, style: str,
     elif material_note:
         material_block = f"\n{material_note}\n"
 
+    # lesson_index (~550 tokens) полезен только когда:
+    # (a) mode=expansion — модель может брать темы для recall из старых
+    #     конспектов;
+    # (b) material_note ненулевой — тема не совпала с файлом, полезно
+    #     показать что вообще есть.
+    # В обычном curriculum-run модель не смотрит на индекс, экономим.
     index_block = ""
-    if lesson_index:
+    if lesson_index and (mode == "expansion" or material_note):
         lines = "\n".join(f"- {name} — {title}" for name, title in lesson_index)
         index_block = (
             f"\nДоступные конспекты курса (для справки — можно мысленно "
@@ -799,12 +822,18 @@ def generate(mode: str) -> int:
         бросает ValueError при невалидной структуре / повторах."""
         msg = user_message + (("\n\n" + extra_user_msg) if extra_user_msg else "")
         chunks: list[str] = []
+        # cache_control на system-блоках: на retry в течение 5 минут
+        # получаем cache hit → −90% стоимости на ~8.7k system-tokens.
+        # Первый вызов дня платит cache write (+25%), но следующие retry
+        # сильно дешевле.
         with client.messages.stream(
             model=MODEL,
             max_tokens=MAX_TOKENS,
             system=[
-                {"type": "text", "text": tutor_prompt},
-                {"type": "text", "text": vocab_spec + "\n\n" + rules},
+                {"type": "text", "text": tutor_prompt,
+                 "cache_control": {"type": "ephemeral"}},
+                {"type": "text", "text": vocab_spec + "\n\n" + rules,
+                 "cache_control": {"type": "ephemeral"}},
             ],
             messages=[{"role": "user", "content": msg}],
         ) as stream:
