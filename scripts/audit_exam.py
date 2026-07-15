@@ -19,6 +19,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -28,6 +29,11 @@ import anthropic
 import common
 import generate as gen
 
+
+# Экзамен генерируется на Haiku (3x дешевле Sonnet: $1/$5 per M vs
+# $3/$15). Структурированный HTML с фиксированной разметкой Haiku 4.5
+# генерирует нормально, а качество вопросов для диагностики достаточно.
+AUDIT_MODEL = os.environ.get("ANTHROPIC_AUDIT_MODEL", "claude-haiku-4-5-20251001")
 
 AUDITS_DIR = common.REPO_ROOT / "audits"
 QUESTIONS_RE = re.compile(r"<questions>(.*?)</questions>", re.DOTALL | re.IGNORECASE)
@@ -188,7 +194,7 @@ def _call_part(client: anthropic.Anthropic, system_blocks: list[dict], user_msg:
         for b in system_blocks
     ]
     with client.messages.stream(
-        model=gen.MODEL,
+        model=AUDIT_MODEL,
         max_tokens=gen.MAX_TOKENS,
         system=cached_system,
         messages=[{"role": "user", "content": user_msg}],

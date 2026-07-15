@@ -298,6 +298,11 @@ def _build_user_message(today: str, progress: dict, style: str,
     # корректные пары в matching. Это часто нарушается, поэтому повторяем
     # явно в каждом user_message.
     quality_block = (
+        "\n**КОМПАКТНОСТЬ HTML (важно, каждый токен стоит):** без "
+        "HTML-комментариев `<!-- ... -->`, CSS-правила одной строкой без "
+        "лишних пробелов, 6–8 grammar-упражнений (не 8–10), hint = 1 "
+        "строка (не абзац), 3–4 примера в грамматике (не 6+). Полный "
+        "список — в `generation_rules.md §7`.\n"
         "\n**КАЧЕСТВО УПРАЖНЕНИЙ (часто нарушается, перечитай):**\n"
         "- В **multiple-choice**: правильный ответ **не должен быть на "
         "первом месте**. Распределяй позицию правильного варианта "
@@ -715,6 +720,36 @@ def _check_mc_options(html: str) -> list[str]:
     return errors
 
 
+_HTML_COMMENT_RE = re.compile(r"<!--.*?-->", re.DOTALL)
+_BLANK_LINES_RE = re.compile(r"\n\s*\n+")
+
+
+def _minify_html(html: str) -> str:
+    """Убирает HTML-комментарии и пустые строки. Ничего внутри
+    `<script>` / `<pre>` / `<textarea>` не трогает, чтобы не сломать JS.
+    Модель может забыть избавиться от них — минификация делает это
+    гарантированно и снижает размер файла (лишние байты в Telegram)."""
+    # разбиваем на сегменты, чтобы не резать <pre>/<script>/<textarea>
+    parts: list[str] = []
+    protected_re = re.compile(
+        r"(<(script|pre|textarea)\b.*?</\2>)", re.DOTALL | re.IGNORECASE
+    )
+    last = 0
+    for m in protected_re.finditer(html):
+        # обычный HTML до защищённого участка
+        chunk = html[last:m.start()]
+        chunk = _HTML_COMMENT_RE.sub("", chunk)
+        chunk = _BLANK_LINES_RE.sub("\n", chunk)
+        parts.append(chunk)
+        parts.append(m.group(0))  # защищённый участок как есть
+        last = m.end()
+    tail = html[last:]
+    tail = _HTML_COMMENT_RE.sub("", tail)
+    tail = _BLANK_LINES_RE.sub("\n", tail)
+    parts.append(tail)
+    return "".join(parts)
+
+
 def _parse_response(text: str) -> tuple[dict, str]:
     m_manifest = MANIFEST_RE.search(text)
     if not m_manifest:
@@ -964,7 +999,12 @@ def generate(mode: str) -> int:
         return 2
 
     common.TRAININGS_DIR.mkdir(parents=True, exist_ok=True)
-    out_path.write_text(html + "\n", encoding="utf-8")
+    minified = _minify_html(html)
+    saved_bytes = len(html) - len(minified)
+    if saved_bytes > 0:
+        print(f"[minify] сэкономлено {saved_bytes} байт "
+              f"({len(html)} → {len(minified)})")
+    out_path.write_text(minified + "\n", encoding="utf-8")
 
     updated = _apply_progress(progress, manifest, today)
     common.save_progress(updated)
