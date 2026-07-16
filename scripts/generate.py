@@ -346,10 +346,14 @@ def _build_user_message(today: str, progress: dict, style: str,
     lesson_number = progress.get("current_lesson", "?")
     session_number = int(progress.get("session_number", 1) or 1)
     known = sorted(_known_words(progress))
-    verbs = _verbs_pool(progress)
     weak = progress.get("weak_words", []) or []
     weak_topics = progress.get("weak_topics", []) or []
     mode = progress.get("mode", "curriculum")
+    # Готовый список 8 слов для new_words (см. forced_words_block ниже).
+    forced_verbs = _verbs_pool(progress, limit=4)
+    forced_non_verbs = _non_verbs_pool(progress, limit=NEW_WORDS_PER_DAY - 4)
+    forced_ready = len(forced_verbs) >= 4 and \
+                   len(forced_non_verbs) >= NEW_WORDS_PER_DAY - 4
 
     # Качество упражнений: рандомизация MC + правильные hint'ы +
     # корректные пары в matching. Это часто нарушается, поэтому повторяем
@@ -427,38 +431,42 @@ def _build_user_message(today: str, progress: dict, style: str,
             f"урок (`is_new_lesson: true`), если тема исчерпана.\n"
         )
 
-    # Запрет на повторы.
+    # Если пулы наполнены — форсируем все 8 слов сразу. Модель не
+    # выбирает лексику, только строит HTML вокруг готовых слов. Это
+    # избавляет от 2-3 попыток из-за повторов (модель упорно повторяет
+    # знакомую лексику в свободных слотах). Экономия: ~2x токенов в
+    # среднем + предсказуемое качество.
+    # Fallback: если пулы истощены — старое поведение (forbidden + свобода).
+    forced_words_block = ""
     forbidden_block = ""
-    if known:
+    if forced_ready:
+        forced_lines = "\n".join(
+            f"  {i+1}. tr=\"{tr}\", ru=\"...\" (по переводу: {en})"
+            for i, (tr, en) in enumerate(
+                [(v[0], v[1]) for v in forced_verbs] + list(forced_non_verbs)
+            )
+        )
+        forced_words_block = (
+            f"\n**ЗАДАННЫЙ СПИСОК {NEW_WORDS_PER_DAY} НОВЫХ СЛОВ:**\n"
+            f"В `manifest.new_words` положи **ровно эти {NEW_WORDS_PER_DAY} "
+            f"турецких слов в этом порядке** (`ru`-перевод подбери сам, "
+            f"английский — ориентир):\n\n{forced_lines}\n\n"
+            f"Эти слова гарантированно НЕ знакомы ученику. Твоя задача — "
+            f"(1) записать их в манифест с русским переводом; "
+            f"(2) собрать вокруг них HTML тренировки: используй их в "
+            f"блоках «🆕 новые слова», «🎯 Глагол дня» (один из 4 "
+            f"глаголов), «✍️ упражнения по грамматике», «🎨 свободная "
+            f"продукция». Не заменяй ни одного из этих слов своими "
+            f"вариантами.\n"
+        )
+    elif known:
         forbidden_block = (
-            f"\n**ЗАПРЕТ НА ПОВТОР ЛЕКСИКИ:** в `manifest.new_words` "
-            f"должно быть {NEW_WORDS_PER_DAY} турецких слов, которых "
-            f"**нет** в этом списке уже знакомых ученику слов "
-            f"({len(known)} шт):\n"
+            f"\n**ЗАПРЕТ НА ПОВТОР ЛЕКСИКИ** (fallback — пулы пуст): "
+            f"в `manifest.new_words` должно быть {NEW_WORDS_PER_DAY} "
+            f"турецких слов, которых **нет** в списке уже знакомых ученику "
+            f"слов ({len(known)} шт):\n"
             f"```\n{', '.join(known)}\n```\n"
-            f"Их можно (и нужно) использовать в упражнениях и тексте "
-            f"тренировки — но **не** в `new_words`. Любой повтор "
-            f"приведёт к отказу генерации.\n"
-        )
-
-    # Фокус на словарь: приоритетный пул глаголов из ТОП-200.
-    verbs_block = ""
-    if verbs:
-        verbs_lines = "\n".join(
-            f"- `{tr}` — {en}  · упр.: {obj}" for tr, en, obj in verbs
-        )
-        verbs_block = (
-            f"\n**ПРИОРИТЕТНЫЙ ПУЛ ГЛАГОЛОВ (ТОП-200 курса, ещё не "
-            f"пройденные ученику — {len(verbs)} шт):**\n"
-            f"{verbs_lines}\n\n"
-            f"Ученик сейчас активно прокачивает словарный запас "
-            f"(сам обозначил это как слабое место). "
-            f"**Минимум 4 из {NEW_WORDS_PER_DAY} новых слов в манифесте "
-            f"должны быть глаголами из этого пула.** Перевод на русский — "
-            f"твой (английский в подсказке как ориентир). Остальные "
-            f"новые слова — на твой выбор, но тоже желательно из "
-            f"высокочастотной лексики (существительные, прилагательные, "
-            f"наречия), полезной для бытовой речи.\n"
+            f"Любой повтор приведёт к отказу генерации.\n"
         )
 
     # Приоритет для Recall: слабые темы по результатам диагностического
@@ -543,7 +551,7 @@ def _build_user_message(today: str, progress: dict, style: str,
         )
 
     return f"""Сгенерируй тренировку на сегодня — {today}.
-{quality_block}{topic_anchor}{session_anchor}{mode_block}{forbidden_block}{verbs_block}{weak_block}{weak_topics_block}
+{forced_words_block}{quality_block}{topic_anchor}{session_anchor}{mode_block}{forbidden_block}{weak_block}{weak_topics_block}
 Текущий прогресс ученика (`lesson_progress.json`):
 ```json
 {progress_json}
@@ -988,54 +996,22 @@ def generate(mode: str) -> int:
             )
         return m, h
 
-    # До 3 попыток с эскалацией:
-    #   1. обычный запрос;
-    #   2. явный «не используй эти слова»;
-    #   3. жёстко предписанные 8 слов (берём 4 из verbs_pool + 4 пустых
-    #      слота на выбор модели среди существительных/прилагательных,
-    #      которые точно НЕ из known).
-    # Эскалация лечит частый случай: long_term ≥400 слов, forbidden-список
-    # огромный, модель упорно повторяется. Готовый список снимает выбор.
-    verbs_pool_local = _verbs_pool(progress, limit=4)
-    non_verbs_pool_local = _non_verbs_pool(progress, limit=8)
+    # До 2 попыток. Список 8 слов уже форсирован в user_message
+    # (forced_words_block), поэтому эскалация нужна только на
+    # содержательные ошибки: MC-дубли, matching-ошибки, опечатки, session-lock,
+    # сеть. Повторов лексики быть не должно — но fallback остаётся.
     manifest: dict | None = None
     html: str = ""
     last_error: str = ""
-    for attempt in (1, 2, 3):
+    for attempt in (1, 2):
         extra = ""
         if attempt == 2:
             extra = (
-                f"⚠️ Предыдущая попытка отклонена: {last_error}. "
-                f"Сгенерируй заново, целиком — с теми же темой и структурой, "
-                f"но **другие {NEW_WORDS_PER_DAY} слов в `new_words`**, "
-                f"которых **точно нет** в списке уже знакомых ученику слов "
-                f"(см. ЗАПРЕТ выше). Бери менее очевидные варианты, "
-                f"расширяющие словарный запас."
-            )
-        elif attempt == 3 and verbs_pool_local and non_verbs_pool_local:
-            # финальная попытка: ВСЕ 8 слов заданы кодом. Модель ничего
-            # сама не выбирает — только формирует HTML вокруг готовых слов.
-            forced_pairs = [(tr, en) for tr, en, _ in verbs_pool_local[:4]]
-            forced_pairs += list(non_verbs_pool_local[:NEW_WORDS_PER_DAY - 4])
-            forced_lines = "\n".join(
-                f"  {i+1}. tr=\"{tr}\", ru=\"...\" (по переводу: {en})"
-                for i, (tr, en) in enumerate(forced_pairs)
-            )
-            extra = (
-                f"🚨 ФИНАЛЬНАЯ ПОПЫТКА (3-я из 3). Прошлые отклонены: "
-                f"{last_error}\n\n"
-                f"**ЖЁСТКОЕ ТРЕБОВАНИЕ:** ВСЕ {NEW_WORDS_PER_DAY} "
-                f"элементов `new_words` в манифесте — ровно эти "
-                f"турецкие слова, в этом порядке. `ru`-перевод подбери "
-                f"сам, опираясь на английский:\n\n{forced_lines}\n\n"
-                f"Ничего своего в `new_words` не добавляй. Все 8 слов "
-                f"из списка выше — они гарантированно НЕ в forbidden. "
-                f"Твоя задача только: (1) записать эти 8 в манифест с "
-                f"переводом на русский; (2) собрать HTML тренировки, "
-                f"используя эти 8 в блоках «новые слова», «глагол дня», "
-                f"«упражнения», «свободная продукция».\n\n"
-                f"Если снова повтор — тренировка не сохранится, ученик "
-                f"получит уведомление об ошибке."
+                f"⚠️ Предыдущая попытка отклонена: {last_error}\n\n"
+                f"Сгенерируй заново, целиком. Соблюдай ВСЕ требования из "
+                f"user_message ниже — особенно ЗАДАННЫЙ СПИСОК 8 слов "
+                f"(если он есть), уникальность MC-вариантов, семантику "
+                f"matching-пар, отсутствие опечаток в правильных ответах."
             )
         try:
             manifest, html = _call(extra)
@@ -1066,6 +1042,7 @@ def generate(mode: str) -> int:
             f"Тренировка {today}: после 2 попыток модель так и не дала "
             f"валидный ответ. Последняя ошибка: {last_error}"
         )
+        print(f"[error] обе попытки провалены: {last_error}", file=sys.stderr)
         return 2
 
     common.TRAININGS_DIR.mkdir(parents=True, exist_ok=True)
