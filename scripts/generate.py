@@ -220,6 +220,63 @@ _EXTRA_VERBS_B2: list[tuple[str, str, str]] = [
 ]
 
 
+# Fallback-пул НЕ-глаголов: существительные, прилагательные, наречия
+# B2/C1 уровня. Используется на финальной retry-попытке когда модель
+# упорно повторяет known-лексику в «свободных» слотах new_words.
+# Формат: (tr, en) — object suffix не нужен.
+_EXTRA_NON_VERBS_B2: list[tuple[str, str]] = [
+    # абстрактные существительные
+    ("umut",           "hope"),
+    ("kanaat",         "conviction / opinion"),
+    ("özgürlük",       "freedom"),
+    ("eşitlik",        "equality"),
+    ("adalet",         "justice"),
+    ("çaba",           "effort / attempt"),
+    ("beceri",         "skill"),
+    ("yetenek",        "ability / talent"),
+    ("tecrübe",        "experience"),
+    ("hayal",          "dream / imagination"),
+    ("ihtiyaç",        "need"),
+    ("ilgi",           "interest / attention"),
+    # социальные / бытовые
+    ("komşu",          "neighbour"),
+    ("misafir",        "guest"),
+    ("hediye",         "gift"),
+    ("davetiye",       "invitation"),
+    ("gelenek",        "tradition"),
+    ("adet",           "custom"),
+    # прилагательные — характер / состояние
+    ("cömert",         "generous"),
+    ("kibar",          "polite"),
+    ("kaba",           "rude"),
+    ("cesur",          "brave"),
+    ("utangaç",        "shy"),
+    ("dikkatsiz",      "careless"),
+    ("bencil",         "selfish"),
+    ("olgun",          "mature"),
+    # прилагательные — качество
+    ("verimli",        "productive / fertile"),
+    ("gereksiz",       "unnecessary"),
+    ("etkili",         "effective"),
+    ("yararlı",        "useful"),
+    ("zararlı",        "harmful"),
+    # наречия / служебные
+    ("aniden",         "suddenly"),
+    ("kesinlikle değil","definitely not"),
+    ("belki de",       "perhaps / maybe"),
+    ("her halükarda",  "in any case"),
+    ("özellikle",      "especially"),
+    ("aslında",        "actually / in fact"),
+]
+
+
+def _non_verbs_pool(progress: dict, limit: int = 20) -> list[tuple[str, str]]:
+    """Свежие существительные/прилагательные/наречия (не в known)."""
+    known = _known_words(progress)
+    return [(tr, en) for tr, en in _EXTRA_NON_VERBS_B2
+            if tr.strip().lower() not in known][:limit]
+
+
 def _parse_verbs_master_list() -> list[tuple[str, str, str]]:
     """Возвращает список (tr, en, object_suffix) из verbs_master_list.md.
 
@@ -940,6 +997,7 @@ def generate(mode: str) -> int:
     # Эскалация лечит частый случай: long_term ≥400 слов, forbidden-список
     # огромный, модель упорно повторяется. Готовый список снимает выбор.
     verbs_pool_local = _verbs_pool(progress, limit=4)
+    non_verbs_pool_local = _non_verbs_pool(progress, limit=8)
     manifest: dict | None = None
     html: str = ""
     last_error: str = ""
@@ -954,24 +1012,30 @@ def generate(mode: str) -> int:
                 f"(см. ЗАПРЕТ выше). Бери менее очевидные варианты, "
                 f"расширяющие словарный запас."
             )
-        elif attempt == 3 and verbs_pool_local:
+        elif attempt == 3 and verbs_pool_local and non_verbs_pool_local:
+            # финальная попытка: ВСЕ 8 слов заданы кодом. Модель ничего
+            # сама не выбирает — только формирует HTML вокруг готовых слов.
+            forced_pairs = [(tr, en) for tr, en, _ in verbs_pool_local[:4]]
+            forced_pairs += list(non_verbs_pool_local[:NEW_WORDS_PER_DAY - 4])
             forced_lines = "\n".join(
                 f"  {i+1}. tr=\"{tr}\", ru=\"...\" (по переводу: {en})"
-                for i, (tr, en, _) in enumerate(verbs_pool_local)
+                for i, (tr, en) in enumerate(forced_pairs)
             )
             extra = (
                 f"🚨 ФИНАЛЬНАЯ ПОПЫТКА (3-я из 3). Прошлые отклонены: "
                 f"{last_error}\n\n"
-                f"**ЖЁСТКОЕ ТРЕБОВАНИЕ:** первые 4 элемента `new_words` "
-                f"в манифесте — ТОЧНО эти турецкие глаголы, в этом "
-                f"порядке (`ru`-перевод подбери сам):\n\n{forced_lines}\n\n"
-                f"Остальные 4 слова в `new_words` — на твой выбор среди "
-                f"существительных/прилагательных/наречий, которых нет в "
-                f"списке уже знакомых. Проверь каждое слово по списку "
-                f"forbidden перед записью манифеста.\n\n"
+                f"**ЖЁСТКОЕ ТРЕБОВАНИЕ:** ВСЕ {NEW_WORDS_PER_DAY} "
+                f"элементов `new_words` в манифесте — ровно эти "
+                f"турецкие слова, в этом порядке. `ru`-перевод подбери "
+                f"сам, опираясь на английский:\n\n{forced_lines}\n\n"
+                f"Ничего своего в `new_words` не добавляй. Все 8 слов "
+                f"из списка выше — они гарантированно НЕ в forbidden. "
+                f"Твоя задача только: (1) записать эти 8 в манифест с "
+                f"переводом на русский; (2) собрать HTML тренировки, "
+                f"используя эти 8 в блоках «новые слова», «глагол дня», "
+                f"«упражнения», «свободная продукция».\n\n"
                 f"Если снова повтор — тренировка не сохранится, ученик "
-                f"получит уведомление об ошибке. Ты не можешь провалить "
-                f"эту попытку."
+                f"получит уведомление об ошибке."
             )
         try:
             manifest, html = _call(extra)
