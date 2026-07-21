@@ -3935,5 +3935,46 @@
     "telling time saat",
     "future -EcEK",
     "nominal predicate değil"
-  ]
+  ],
+  "pending_manifest": {
+    "lesson_number": 59,
+    "lesson_title": "ПЛЮСКВАМПЕРФЕКТ — Суффикс -mIştI («давно прошедшее»)",
+    "session_number": 1,
+    "is_new_lesson": true,
+    "new_words": [
+      {
+        "tr": "kaldırmak",
+        "ru": "поднимать / убирать"
+      },
+      {
+        "tr": "selamlamak",
+        "ru": "приветствовать / здороваться"
+      },
+      {
+        "tr": "konuk etmek",
+        "ru": "принимать гостей / быть хозяином"
+      },
+      {
+        "tr": "veda etmek",
+        "ru": "прощаться / говорить «до свидания»"
+      },
+      {
+        "tr": "adet",
+        "ru": "обычай / традиция"
+      },
+      {
+        "tr": "cömert",
+        "ru": "щедрый"
+      },
+      {
+        "tr": "kibar",
+        "ru": "вежливый / воспитанный"
+      },
+      {
+        "tr": "kaba",
+        "ru": "грубый / невоспитанный"
+      }
+    ]
+  },
+  "pending_since": "2026-07-21"
 }
