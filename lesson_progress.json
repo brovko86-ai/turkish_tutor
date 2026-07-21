@@ -3306,6 +3306,45 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": null,
-  "pending_since": null
+  "pending_manifest": {
+    "lesson_number": 52,
+    "lesson_title": "ПАССИВ — Суффикс -IL/-İL/-UL/-ÜL/-N: «быть сделанным / делаться»",
+    "session_number": 2,
+    "is_new_lesson": false,
+    "new_words": [
+      {
+        "tr": "gurur duymak",
+        "ru": "гордиться / испытывать гордость"
+      },
+      {
+        "tr": "hayret etmek",
+        "ru": "удивляться / изумляться"
+      },
+      {
+        "tr": "sıkılmak",
+        "ru": "скучать / надоедать / чувствовать усталость"
+      },
+      {
+        "tr": "rahatsız olmak",
+        "ru": "чувствовать себя неловко / испытывать дискомфорт"
+      },
+      {
+        "tr": "umut",
+        "ru": "надежда"
+      },
+      {
+        "tr": "kanaat",
+        "ru": "убеждение / мнение / суждение"
+      },
+      {
+        "tr": "özgürlük",
+        "ru": "свобода"
+      },
+      {
+        "tr": "eşitlik",
+        "ru": "равенство / равноправие"
+      }
+    ]
+  },
+  "pending_since": "2026-07-21"
 }
