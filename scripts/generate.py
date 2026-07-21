@@ -447,17 +447,28 @@ def _build_user_message(today: str, progress: dict, style: str,
             )
         )
         forced_words_block = (
-            f"\n**ЗАДАННЫЙ СПИСОК {NEW_WORDS_PER_DAY} НОВЫХ СЛОВ:**\n"
-            f"В `manifest.new_words` положи **ровно эти {NEW_WORDS_PER_DAY} "
-            f"турецких слов в этом порядке** (`ru`-перевод подбери сам, "
-            f"английский — ориентир):\n\n{forced_lines}\n\n"
-            f"Эти слова гарантированно НЕ знакомы ученику. Твоя задача — "
-            f"(1) записать их в манифест с русским переводом; "
-            f"(2) собрать вокруг них HTML тренировки: используй их в "
-            f"блоках «🆕 новые слова», «🎯 Глагол дня» (один из 4 "
-            f"глаголов), «✍️ упражнения по грамматике», «🎨 свободная "
-            f"продукция». Не заменяй ни одного из этих слов своими "
-            f"вариантами.\n"
+            f"\n🚨 **ЗАДАННЫЙ СПИСОК {NEW_WORDS_PER_DAY} НОВЫХ СЛОВ — "
+            f"НЕ ИЗМЕНЯТЬ:**\n"
+            f"В `manifest.new_words` положи **РОВНО эти {NEW_WORDS_PER_DAY} "
+            f"турецких слов в этом порядке**. `tr`-значение = точная "
+            f"строка из списка (регистр не важен), `ru` — твой перевод "
+            f"по английскому:\n\n{forced_lines}\n\n"
+            f"⚠️ **Валидатор проверит:** каждый `manifest.new_words[i].tr` "
+            f"должен быть в этом списке. Если модель поставит СВОЙ "
+            f"глагол/существительное (даже связанный с темой урока) — "
+            f"валидация упадёт, будет retry, при повторе — тренировка "
+            f"НЕ сохранится, ученик получит уведомление об ошибке.\n\n"
+            f"Даже если тема урока подсказывает конкретные слова "
+            f"(например тема «пассив» и хочется подставить `seçilmek`, "
+            f"`açıklanmak` и т.п.) — НЕ ДЕЛАЙ этого. Эти слова уже "
+            f"знакомы ученику. Возьми ТОЛЬКО из списка выше.\n\n"
+            f"Задача разбита на 2 шага:\n"
+            f"1) Записать эти {NEW_WORDS_PER_DAY} слов в манифест с "
+            f"русским переводом;\n"
+            f"2) Собрать HTML вокруг них: использовать в «🆕 новые слова», "
+            f"«🎯 Глагол дня» (один из 4 глаголов), «✍️ упражнения», "
+            f"«🎨 свободная продукция», примеры в грамматике. "
+            f"Применяй грамматику урока К ЭТИМ словам.\n"
         )
     elif known:
         forbidden_block = (
@@ -917,6 +928,20 @@ def generate(mode: str) -> int:
     client = anthropic.Anthropic(timeout=1800.0)
     known = _known_words(progress)
 
+    # Если пулы наполнены — модель ОБЯЗАНА взять эти 8 слов. Валидатор
+    # ниже проверяет что new_words == forced_pairs (по tr, без учёта
+    # регистра). Иначе ValueError и retry.
+    _forced_verbs = _verbs_pool(progress, limit=4)
+    _forced_non_verbs = _non_verbs_pool(progress, limit=NEW_WORDS_PER_DAY - 4)
+    forced_ready = (len(_forced_verbs) >= 4 and
+                    len(_forced_non_verbs) >= NEW_WORDS_PER_DAY - 4)
+    forced_tr_ordered: list[str] = []
+    if forced_ready:
+        forced_tr_ordered = (
+            [v[0].strip().lower() for v in _forced_verbs[:4]] +
+            [nv[0].strip().lower() for nv in _forced_non_verbs[:NEW_WORDS_PER_DAY - 4]]
+        )
+
     def _call(extra_user_msg: str = "") -> tuple[dict, str]:
         """Один вызов API + парсинг. Возвращает (manifest, html) или
         бросает ValueError при невалидной структуре / повторах.
@@ -944,15 +969,32 @@ def generate(mode: str) -> int:
         text = "".join(chunks)
         print(f"[anthropic] получено {len(text)} символов")
         m, h = _parse_response(text)
-        reps = [
-            w for w in m["new_words"]
-            if w["tr"].strip().lower() in known
-        ]
-        if reps:
-            raise ValueError(
-                "повтор знакомой лексики: "
-                + ", ".join(f"{w['tr']!r}" for w in reps)
-            )
+
+        # Строгая валидация forced-list: если код задал 8 слов, модель
+        # обязана их использовать точь-в-точь (по tr, без учёта регистра
+        # и краевых пробелов). Отклонения — retry с явной пометкой.
+        if forced_ready:
+            got_tr = [w["tr"].strip().lower() for w in m["new_words"]]
+            missing = [tr for tr in forced_tr_ordered if tr not in got_tr]
+            extras  = [tr for tr in got_tr if tr not in forced_tr_ordered]
+            if missing or extras:
+                raise ValueError(
+                    f"new_words не совпадает с forced-list. "
+                    f"пропущены: {missing or '—'}; "
+                    f"лишние (не из forced): {extras or '—'}. "
+                    f"forced был: {forced_tr_ordered}"
+                )
+        else:
+            # fallback: пулы истощены → проверка на повторы known-лексики
+            reps = [
+                w for w in m["new_words"]
+                if w["tr"].strip().lower() in known
+            ]
+            if reps:
+                raise ValueError(
+                    "повтор знакомой лексики: "
+                    + ", ".join(f"{w['tr']!r}" for w in reps)
+                )
         # Валидация matching-пар: парсер ищет matching-карточки и сверяет
         # tr ↔ ru через vocabulary_bank. Любое несовпадение → retry.
         matching_errors = _check_matching_pairs(h, progress, m)
