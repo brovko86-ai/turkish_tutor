@@ -965,9 +965,68 @@ def _apply_progress(progress: dict, manifest: dict, today: str) -> dict:
     return progress
 
 
+def _pending_html_path(progress: dict) -> Path | None:
+    """HTML pending тренировки (по дате из pending_since)."""
+    ps = progress.get("pending_since")
+    if not ps:
+        return None
+    p = common.training_path(ps)
+    return p if p.exists() else None
+
+
+def _days_between(a: str, b: str) -> int:
+    """Разница дней между YYYY-MM-DD строками (b - a)."""
+    from datetime import date
+    try:
+        ya, ma, da = (int(x) for x in a.split("-"))
+        yb, mb, db = (int(x) for x in b.split("-"))
+        return (date(yb, mb, db) - date(ya, ma, da)).days
+    except (ValueError, AttributeError):
+        return 0
+
+
 def generate(mode: str) -> int:
     today = common.today_str()
     out_path = common.training_path(today)
+    progress = common.load_progress()
+
+    # === Pending-тренировка (не завершённая через /done) ===
+    pending_manifest = progress.get("pending_manifest")
+    if pending_manifest:
+        pending_since = progress.get("pending_since") or today
+        days = _days_between(pending_since, today)
+        pending_html = _pending_html_path(progress)
+
+        if mode == "on_demand":
+            # ученик просит /today — переотправим неоконченную с напоминалкой
+            if pending_html:
+                caption = (
+                    f"⏳ У тебя есть неоконченная тренировка от "
+                    f"{pending_since} ({days} дн. назад). "
+                    f"Заверши её и пришли /done — тогда пойдёт следующая. "
+                    f"Или /skip чтобы двинуться дальше без закрытия."
+                )
+                common.send_document(pending_html, caption=caption)
+            else:
+                common.send_message(
+                    f"⏳ Есть pending от {pending_since}, но HTML файл "
+                    f"утерян. Пришли /skip чтобы разблокировать."
+                )
+            return 0
+
+        # scheduled: молчим первые 2 дня, потом раз в день короткая напоминалка
+        if days < 3:
+            print(f"[scheduled] pending от {pending_since} ({days} дн.), "
+                  f"первые 2 дня без напоминаний. Выхожу.")
+            return 0
+        # 3+ дней — короткая напоминалка (без HTML, чтобы не спамить)
+        common.send_message(
+            f"⏳ Тренировка от {pending_since} ({days} дн. назад) ждёт "
+            f"закрытия. Пройди её и пришли /done, или /skip чтобы "
+            f"продвинуться дальше. Пока pending — новые не генерирую."
+        )
+        print(f"[scheduled] pending {days} дн., напоминалка отправлена.")
+        return 0
 
     if out_path.exists():
         if mode == "scheduled":
@@ -981,7 +1040,7 @@ def generate(mode: str) -> int:
     tutor_prompt = _read(common.REPO_ROOT / "tutor_prompt.md")
     vocab_spec = _read(common.REPO_ROOT / "VOCAB_TRAINER_SPEC.md")
     rules = _read(common.REPO_ROOT / "generation_rules.md")
-    progress = common.load_progress()
+    # `progress` уже загружен выше (для проверки pending)
     style = _style_sample()
     material, note = _lesson_material(
         int(progress.get("current_lesson", 0)),
@@ -1162,15 +1221,20 @@ def generate(mode: str) -> int:
               f"({len(html)} → {len(minified)})")
     out_path.write_text(minified + "\n", encoding="utf-8")
 
-    updated = _apply_progress(progress, manifest, today)
-    common.save_progress(updated)
+    # НЕ применяем _apply_progress сразу. Сохраняем manifest как pending
+    # до подтверждения от ученика (/done или /skip). Так реальный
+    # словарь синхронизирован с реально пройденными тренировками.
+    progress["pending_manifest"] = manifest
+    progress["pending_since"] = today
+    common.save_progress(progress)
 
     caption = (
-        f"Урок {manifest['lesson_number']}: {manifest['lesson_title']}"
-        f" (сессия {manifest['session_number']})"
+        f"Урок {manifest['lesson_number']}: {manifest['lesson_title']} "
+        f"(сессия {manifest['session_number']}). "
+        f"Когда закончишь — пришли /done."
     )
     common.send_document(out_path, caption=caption)
-    print(f"[ok] {out_path.name} сгенерирован и отправлен")
+    print(f"[ok] {out_path.name} сгенерирован, ждёт /done")
     return 0
 
 

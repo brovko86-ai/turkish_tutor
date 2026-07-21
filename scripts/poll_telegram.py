@@ -27,15 +27,63 @@ import generate
 
 HELP_TEXT = (
     "Доступные команды:\n"
-    "  /today — сгенерировать тренировку прямо сейчас\n"
-    "  /weak <слово> <слово> — добавить турецкие слова в weak_words\n"
-    "  /learned <слово> <слово> — убрать слова из weak_words\n"
+    "  /done — подтвердить, что прошёл тренировку (применить прогресс)\n"
+    "  /skip — пропустить неоконченную тренировку и двинуться дальше\n"
+    "  /today — сгенерировать/переотправить тренировку\n"
+    "  /weak <слово> — добавить в weak_words\n"
+    "  /learned <слово> — убрать из weak_words\n"
     "  /topics <тема>, <тема> — записать слабые темы (с экзамена)\n"
-    "  /clear topics — очистить weak_topics\n"
-    "  /clear weak — очистить weak_words\n"
-    "  /status — текущий прогресс\n"
+    "  /clear topics|weak — очистить\n"
+    "  /status — текущий прогресс + pending\n"
     "  /help — этот список"
 )
+
+
+def _cmd_done(_args: str) -> str:
+    """`/done` — ученик прошёл pending тренировку. Применяем manifest:
+    active → long_term, new_words → active, обновляем lesson, чистим pending."""
+    progress = common.load_progress()
+    pm = progress.get("pending_manifest")
+    if not pm:
+        return (
+            "⚠️ Нет неоконченной тренировки. Пришли /today чтобы "
+            "сгенерировать новую."
+        )
+    since = progress.get("pending_since") or common.today_str()
+    # переиспользуем _apply_progress из generate — детерминированное
+    # обновление прогресса (active/long_term/lesson_*/completed).
+    import generate  # локальный import, чтобы не тянуть anthropic при import poll
+    updated = generate._apply_progress(progress, pm, since)
+    updated["pending_manifest"] = None
+    updated["pending_since"] = None
+    common.save_progress(updated)
+    return (
+        f"✅ Готово! Прогресс обновлён: урок {pm['lesson_number']} "
+        f"«{pm['lesson_title']}», сессия {pm['session_number']}. "
+        f"8 слов переехали в active. Следующая тренировка сгенерируется "
+        f"утром в 06:00 MSK или по /today."
+    )
+
+
+def _cmd_skip(_args: str) -> str:
+    """`/skip` — принудительно закрыть pending без реального прохождения.
+    Применяем manifest всё равно (иначе прогресс замрёт), но с пометкой."""
+    progress = common.load_progress()
+    pm = progress.get("pending_manifest")
+    if not pm:
+        return "⚠️ Нет неоконченной тренировки — /skip делать нечего."
+    since = progress.get("pending_since") or common.today_str()
+    import generate
+    updated = generate._apply_progress(progress, pm, since)
+    updated["pending_manifest"] = None
+    updated["pending_since"] = None
+    common.save_progress(updated)
+    return (
+        f"⏭ Пропустил тренировку от {since} (урок {pm['lesson_number']} "
+        f"«{pm['lesson_title']}»). Прогресс двинулся вперёд, но слова "
+        f"могут остаться слабыми — при следующем словарном тренажёре "
+        f"они могут попасть в weak_words."
+    )
 
 
 def _cmd_topics(args: str) -> str:
@@ -141,20 +189,30 @@ def _cmd_clear(args: str) -> str:
 
 def _cmd_status(_args: str) -> str:
     p = common.load_progress()
-    return (
-        f"📊 Текущий прогресс\n"
-        f"Урок: {p.get('current_lesson')} «{p.get('lesson_title')}»\n"
-        f"Session: {p.get('session_number')}, mode: {p.get('mode', 'curriculum')}\n"
-        f"Active (5 свежих слов): "
-        f"{', '.join(w['tr'] for w in p.get('vocabulary_bank',{}).get('active',[]))}\n"
-        f"Long-term: {len(p.get('vocabulary_bank',{}).get('long_term',[]))} слов\n"
-        f"Weak words: {len(p.get('weak_words',[]) or [])}\n"
-        f"Weak topics: {len(p.get('weak_topics',[]) or [])}"
-    )
+    lines = [
+        f"📊 Текущий прогресс",
+        f"Урок: {p.get('current_lesson')} «{p.get('lesson_title')}»",
+        f"Session: {p.get('session_number')}, mode: {p.get('mode', 'curriculum')}",
+        f"Active: {', '.join(w['tr'] for w in p.get('vocabulary_bank',{}).get('active',[]))}",
+        f"Long-term: {len(p.get('vocabulary_bank',{}).get('long_term',[]))} слов",
+        f"Weak words: {len(p.get('weak_words',[]) or [])}",
+        f"Weak topics: {len(p.get('weak_topics',[]) or [])}",
+    ]
+    pm = p.get("pending_manifest")
+    if pm:
+        since = p.get("pending_since") or "?"
+        lines.append(
+            f"\n⏳ Pending: тренировка от {since} — "
+            f"урок {pm.get('lesson_number')} «{pm.get('lesson_title')}» "
+            f"ждёт /done или /skip."
+        )
+    return "\n".join(lines)
 
 
 # command → handler. Возвращает текст для отправки в Telegram (или "" если ничего).
 COMMANDS = {
+    "/done":    _cmd_done,
+    "/skip":    _cmd_skip,
     "/weak":    _cmd_weak,
     "/learned": _cmd_learned,
     "/topics":  _cmd_topics,
