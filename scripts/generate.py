@@ -217,6 +217,55 @@ _EXTRA_VERBS_B2: list[tuple[str, str, str]] = [
     ("dayanmak",      "to endure / lean on",                "-a, -e"),
     ("yansımak",      "to be reflected",                    "-a, -e"),
     ("yer almak",     "to take place / be included",        "-da, -de"),
+
+    # === ВОЛНА 2 (2026-07-21): расширенный B2/C1 пул ===
+    # физика / движение
+    ("fırlatmak",     "to throw / launch",                  "-ı, -i"),
+    ("yakalamak",     "to catch",                           "-ı, -i"),
+    ("kaçırmak",      "to miss / kidnap",                   "-ı, -i"),
+    ("düşürmek",      "to drop",                            "-ı, -i"),
+    ("kaldırmak",     "to lift / remove",                   "-ı, -i"),
+    ("çevirmek",      "to turn / translate",                "-ı, -i"),
+    # социальное
+    ("selamlamak",    "to greet",                           "-ı, -i"),
+    ("konuk etmek",   "to host",                            "-ı, -i"),
+    ("veda etmek",    "to say goodbye",                     "-a, -e"),
+    ("teşekkür etmek","to thank",                           "-a, -e"),
+    ("özür dilemek",  "to apologise",                       "-dan, -den"),
+    ("teselli etmek", "to console",                         "-ı, -i"),
+    # эмоции / состояние
+    ("hüzünlenmek",   "to become sad",                      "—"),
+    ("heyecanlanmak", "to get excited",                     "—"),
+    ("gülümsemek",    "to smile",                           "—"),
+    ("bağırmak",      "to shout",                           "-a, -e"),
+    ("ağlamak",       "to cry",                             "—"),
+    # действия
+    ("teklif etmek",  "to offer / propose",                 "-ı, -i"),
+    ("yasaklamak",    "to prohibit / ban",                  "-ı, -i"),
+    ("izin vermek",   "to allow",                           "-a, -e"),
+    ("engellemek",    "to prevent / block",                 "-ı, -i"),
+    ("yardım etmek",  "to help",                            "-a, -e"),
+    ("kurtarmak",     "to save / rescue",                   "-ı, -i"),
+    # деятельность / творчество
+    ("üretmek",       "to produce",                         "-ı, -i"),
+    ("tasarlamak",    "to design",                          "-ı, -i"),
+    ("çizmek",        "to draw / cross out",                "-ı, -i"),
+    ("boyamak",       "to paint / colour",                  "-ı, -i"),
+    ("inşa etmek",    "to build",                           "-ı, -i"),
+    ("onarmak",       "to repair",                          "-ı, -i"),
+    # мышление / память
+    ("unutmak",       "to forget",                          "-ı, -i"),
+    ("aklına gelmek", "to come to mind",                    "-ın"),
+    ("düşünmek",      "to think",                           "-ı, -i"),
+    ("şaşırmak",      "to be surprised",                    "-a, -e"),
+    ("emin olmak",    "to be sure",                         "-dan, -den"),
+    ("tereddüt etmek","to hesitate",                        "—"),
+    # практическое
+    ("hazırlanmak",   "to prepare oneself",                 "-a, -e"),
+    ("harekete geçmek","to take action",                    "—"),
+    ("dinlenmek",     "to rest",                            "—"),
+    ("uğraşmak",      "to deal with / try hard",            "-la"),
+    ("başarmak",      "to succeed / accomplish",            "-ı, -i"),
 ]
 
 
@@ -275,6 +324,26 @@ def _non_verbs_pool(progress: dict, limit: int = 20) -> list[tuple[str, str]]:
     known = _known_words(progress)
     return [(tr, en) for tr, en in _EXTRA_NON_VERBS_B2
             if tr.strip().lower() not in known][:limit]
+
+
+def _split_forced_pools(progress: dict):
+    """Возвращает (verbs, non_verbs) для forced-list общей длиной
+    NEW_WORDS_PER_DAY (=8). Идеал: 4 глагола + 4 не-глагола. Если
+    глаголов недостаточно — берём меньше глаголов и больше не-глаголов
+    (и наоборот). Приоритет: глаголы (важнее для расширения активной
+    речи), но если их 0-3 — компенсируем.
+    """
+    all_verbs = _verbs_pool(progress, limit=NEW_WORDS_PER_DAY)
+    all_non = _non_verbs_pool(progress, limit=NEW_WORDS_PER_DAY)
+    # идеал
+    ideal_verbs = min(4, len(all_verbs))
+    remaining = NEW_WORDS_PER_DAY - ideal_verbs
+    non_take = min(remaining, len(all_non))
+    # если non_verbs не покрывают остаток — вернёмся за верб
+    if non_take < remaining:
+        extra_verbs = min(remaining - non_take, len(all_verbs) - ideal_verbs)
+        ideal_verbs += extra_verbs
+    return all_verbs[:ideal_verbs], all_non[:non_take]
 
 
 def _parse_verbs_master_list() -> list[tuple[str, str, str]]:
@@ -349,11 +418,10 @@ def _build_user_message(today: str, progress: dict, style: str,
     weak = progress.get("weak_words", []) or []
     weak_topics = progress.get("weak_topics", []) or []
     mode = progress.get("mode", "curriculum")
-    # Готовый список 8 слов для new_words (см. forced_words_block ниже).
-    forced_verbs = _verbs_pool(progress, limit=4)
-    forced_non_verbs = _non_verbs_pool(progress, limit=NEW_WORDS_PER_DAY - 4)
-    forced_ready = len(forced_verbs) >= 4 and \
-                   len(forced_non_verbs) >= NEW_WORDS_PER_DAY - 4
+    # Готовый список 8 слов. Пробуем 4+4, но если верб не хватает —
+    # добираем не-глаголами (и наоборот). Ready если суммарно ≥ 8.
+    forced_verbs, forced_non_verbs = _split_forced_pools(progress)
+    forced_ready = len(forced_verbs) + len(forced_non_verbs) >= NEW_WORDS_PER_DAY
 
     # Качество упражнений: рандомизация MC + правильные hint'ы +
     # корректные пары в matching. Это часто нарушается, поэтому повторяем
@@ -930,16 +998,15 @@ def generate(mode: str) -> int:
 
     # Если пулы наполнены — модель ОБЯЗАНА взять эти 8 слов. Валидатор
     # ниже проверяет что new_words == forced_pairs (по tr, без учёта
-    # регистра). Иначе ValueError и retry.
-    _forced_verbs = _verbs_pool(progress, limit=4)
-    _forced_non_verbs = _non_verbs_pool(progress, limit=NEW_WORDS_PER_DAY - 4)
-    forced_ready = (len(_forced_verbs) >= 4 and
-                    len(_forced_non_verbs) >= NEW_WORDS_PER_DAY - 4)
+    # регистра). Иначе ValueError и retry. Пропорция гибкая: если
+    # верб мало, добираем не-глаголами (см. _split_forced_pools).
+    _forced_verbs, _forced_non_verbs = _split_forced_pools(progress)
+    forced_ready = len(_forced_verbs) + len(_forced_non_verbs) >= NEW_WORDS_PER_DAY
     forced_tr_ordered: list[str] = []
     if forced_ready:
         forced_tr_ordered = (
-            [v[0].strip().lower() for v in _forced_verbs[:4]] +
-            [nv[0].strip().lower() for nv in _forced_non_verbs[:NEW_WORDS_PER_DAY - 4]]
+            [v[0].strip().lower() for v in _forced_verbs] +
+            [nv[0].strip().lower() for nv in _forced_non_verbs]
         )
 
     def _call(extra_user_msg: str = "") -> tuple[dict, str]:
