@@ -3366,6 +3366,45 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": null,
-  "pending_since": null
+  "pending_manifest": {
+    "lesson_number": 53,
+    "lesson_title": "ПЛЮСКВАМПЕРФЕКТ и БУДУЩЕЕ В ПРОШЕДШЕМ — Суффиксы -mIştI и -EcEkTI: «уже сделал» и «собирался сделать»",
+    "session_number": 1,
+    "is_new_lesson": true,
+    "new_words": [
+      {
+        "tr": "itiraz etmek",
+        "ru": "возражать / протестовать"
+      },
+      {
+        "tr": "belirtmek",
+        "ru": "указывать / отмечать / обозначать"
+      },
+      {
+        "tr": "vurgulamak",
+        "ru": "подчёркивать / акцентировать"
+      },
+      {
+        "tr": "özetlemek",
+        "ru": "подводить итог / резюмировать"
+      },
+      {
+        "tr": "adalet",
+        "ru": "справедливость / правосудие"
+      },
+      {
+        "tr": "beceri",
+        "ru": "навык / умение"
+      },
+      {
+        "tr": "tecrübe",
+        "ru": "опыт"
+      },
+      {
+        "tr": "hayal",
+        "ru": "мечта / воображение"
+      }
+    ]
+  },
+  "pending_since": "2026-07-27"
 }
