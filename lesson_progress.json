@@ -3493,6 +3493,45 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": null,
-  "pending_since": null
+  "pending_manifest": {
+    "lesson_number": 54,
+    "lesson_title": "КОСВЕННАЯ РЕЧЬ — Суффиксы -DIğını/-EcEğini + глаголы речи (söylemek, demek, sanmak)",
+    "session_number": 1,
+    "is_new_lesson": true,
+    "new_words": [
+      {
+        "tr": "gerçekleştirmek",
+        "ru": "осуществлять / реализовывать"
+      },
+      {
+        "tr": "hedeflemek",
+        "ru": "нацеливаться / ставить целью"
+      },
+      {
+        "tr": "değerlendirmek",
+        "ru": "оценивать / анализировать"
+      },
+      {
+        "tr": "varsaymak",
+        "ru": "предполагать / допускать"
+      },
+      {
+        "tr": "adet",
+        "ru": "обычай / традиция"
+      },
+      {
+        "tr": "cömert",
+        "ru": "щедрый"
+      },
+      {
+        "tr": "kibar",
+        "ru": "вежливый"
+      },
+      {
+        "tr": "kaba",
+        "ru": "грубый"
+      }
+    ]
+  },
+  "pending_since": "2026-08-02"
 }
