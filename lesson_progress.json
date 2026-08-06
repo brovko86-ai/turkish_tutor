@@ -1,49 +1,49 @@
 {
-  "current_lesson": 53,
-  "lesson_title": "ПЛЮСКВАМПЕРФЕКТ и БУДУЩЕЕ В ПРОШЕДШЕМ — Суффиксы -mIştI и -EcEkTI: «уже сделал» и «собирался сделать»",
-  "session_number": 2,
-  "date": "2026-07-30",
+  "current_lesson": 54,
+  "lesson_title": "КОСВЕННАЯ РЕЧЬ — Суффиксы -DIğını/-EcEğini + глаголы речи (söylemek, demek, sanmak)",
+  "session_number": 1,
+  "date": "2026-08-02",
   "vocabulary_bank": {
     "active": [
       {
-        "tr": "yorumlamak",
-        "ru": "комментировать / интерпретировать",
-        "introduced": "2026-07-30"
+        "tr": "gerçekleştirmek",
+        "ru": "осуществлять / реализовывать",
+        "introduced": "2026-08-02"
       },
       {
-        "tr": "planlamak",
-        "ru": "планировать",
-        "introduced": "2026-07-30"
+        "tr": "hedeflemek",
+        "ru": "нацеливаться / ставить целью",
+        "introduced": "2026-08-02"
       },
       {
-        "tr": "başvurmak",
-        "ru": "обращаться / подавать заявку",
-        "introduced": "2026-07-30"
+        "tr": "değerlendirmek",
+        "ru": "оценивать / анализировать",
+        "introduced": "2026-08-02"
       },
       {
-        "tr": "üstlenmek",
-        "ru": "брать на себя / принимать ответственность",
-        "introduced": "2026-07-30"
+        "tr": "varsaymak",
+        "ru": "предполагать / допускать",
+        "introduced": "2026-08-02"
       },
       {
-        "tr": "ihtiyaç",
-        "ru": "нужда / потребность",
-        "introduced": "2026-07-30"
+        "tr": "adet",
+        "ru": "обычай / традиция",
+        "introduced": "2026-08-02"
       },
       {
-        "tr": "ilgi",
-        "ru": "интерес / внимание",
-        "introduced": "2026-07-30"
+        "tr": "cömert",
+        "ru": "щедрый",
+        "introduced": "2026-08-02"
       },
       {
-        "tr": "davetiye",
-        "ru": "приглашение",
-        "introduced": "2026-07-30"
+        "tr": "kibar",
+        "ru": "вежливый",
+        "introduced": "2026-08-02"
       },
       {
-        "tr": "gelenek",
-        "ru": "традиция",
-        "introduced": "2026-07-30"
+        "tr": "kaba",
+        "ru": "грубый",
+        "introduced": "2026-08-02"
       }
     ],
     "long_term": [
@@ -3310,6 +3310,54 @@
         "ru": "мечта / воображение",
         "introduced": "2026-07-27",
         "moved": "2026-07-30"
+      },
+      {
+        "tr": "yorumlamak",
+        "ru": "комментировать / интерпретировать",
+        "introduced": "2026-07-30",
+        "moved": "2026-08-02"
+      },
+      {
+        "tr": "planlamak",
+        "ru": "планировать",
+        "introduced": "2026-07-30",
+        "moved": "2026-08-02"
+      },
+      {
+        "tr": "başvurmak",
+        "ru": "обращаться / подавать заявку",
+        "introduced": "2026-07-30",
+        "moved": "2026-08-02"
+      },
+      {
+        "tr": "üstlenmek",
+        "ru": "брать на себя / принимать ответственность",
+        "introduced": "2026-07-30",
+        "moved": "2026-08-02"
+      },
+      {
+        "tr": "ihtiyaç",
+        "ru": "нужда / потребность",
+        "introduced": "2026-07-30",
+        "moved": "2026-08-02"
+      },
+      {
+        "tr": "ilgi",
+        "ru": "интерес / внимание",
+        "introduced": "2026-07-30",
+        "moved": "2026-08-02"
+      },
+      {
+        "tr": "davetiye",
+        "ru": "приглашение",
+        "introduced": "2026-07-30",
+        "moved": "2026-08-02"
+      },
+      {
+        "tr": "gelenek",
+        "ru": "традиция",
+        "introduced": "2026-07-30",
+        "moved": "2026-08-02"
       }
     ]
   },
@@ -3358,9 +3406,10 @@
     50,
     51,
     52,
-    53
+    53,
+    54
   ],
-  "next_lesson": 54,
+  "next_lesson": 55,
   "weak_words": [
     {
       "tr": "ilerlemek",
@@ -3508,42 +3557,42 @@
   "pending_manifest": {
     "lesson_number": 54,
     "lesson_title": "КОСВЕННАЯ РЕЧЬ — Суффиксы -DIğını/-EcEğini + глаголы речи (söylemek, demek, sanmak)",
-    "session_number": 1,
-    "is_new_lesson": true,
+    "session_number": 2,
+    "is_new_lesson": false,
     "new_words": [
       {
-        "tr": "gerçekleştirmek",
-        "ru": "осуществлять / реализовывать"
+        "tr": "çıkarmak",
+        "ru": "делать вывод / выводить / извлекать"
       },
       {
-        "tr": "hedeflemek",
-        "ru": "нацеливаться / ставить целью"
+        "tr": "sezmek",
+        "ru": "чувствовать / улавливать / догадываться"
       },
       {
-        "tr": "değerlendirmek",
-        "ru": "оценивать / анализировать"
+        "tr": "kavramak",
+        "ru": "понимать / схватывать / осмыслять"
       },
       {
-        "tr": "varsaymak",
-        "ru": "предполагать / допускать"
+        "tr": "tanıştırmak",
+        "ru": "знакомить (кого-то с кем-то)"
       },
       {
-        "tr": "adet",
-        "ru": "обычай / традиция"
+        "tr": "cesur",
+        "ru": "смелый / храбрый"
       },
       {
-        "tr": "cömert",
-        "ru": "щедрый"
+        "tr": "utangaç",
+        "ru": "застенчивый / робкий"
       },
       {
-        "tr": "kibar",
-        "ru": "вежливый"
+        "tr": "dikkatsiz",
+        "ru": "невнимательный / небрежный"
       },
       {
-        "tr": "kaba",
-        "ru": "грубый"
+        "tr": "bencil",
+        "ru": "эгоистичный / себялюбивый"
       }
     ]
   },
-  "pending_since": "2026-08-02"
+  "pending_since": "2026-08-06"
 }
