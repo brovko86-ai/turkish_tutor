@@ -1,49 +1,49 @@
 {
   "current_lesson": 54,
   "lesson_title": "КОСВЕННАЯ РЕЧЬ — Суффиксы -DIğını/-EcEğini + глаголы речи (söylemek, demek, sanmak)",
-  "session_number": 1,
-  "date": "2026-08-02",
+  "session_number": 2,
+  "date": "2026-08-06",
   "vocabulary_bank": {
     "active": [
       {
-        "tr": "gerçekleştirmek",
-        "ru": "осуществлять / реализовывать",
-        "introduced": "2026-08-02"
+        "tr": "çıkarmak",
+        "ru": "делать вывод / выводить / извлекать",
+        "introduced": "2026-08-06"
       },
       {
-        "tr": "hedeflemek",
-        "ru": "нацеливаться / ставить целью",
-        "introduced": "2026-08-02"
+        "tr": "sezmek",
+        "ru": "чувствовать / улавливать / догадываться",
+        "introduced": "2026-08-06"
       },
       {
-        "tr": "değerlendirmek",
-        "ru": "оценивать / анализировать",
-        "introduced": "2026-08-02"
+        "tr": "kavramak",
+        "ru": "понимать / схватывать / осмыслять",
+        "introduced": "2026-08-06"
       },
       {
-        "tr": "varsaymak",
-        "ru": "предполагать / допускать",
-        "introduced": "2026-08-02"
+        "tr": "tanıştırmak",
+        "ru": "знакомить (кого-то с кем-то)",
+        "introduced": "2026-08-06"
       },
       {
-        "tr": "adet",
-        "ru": "обычай / традиция",
-        "introduced": "2026-08-02"
+        "tr": "cesur",
+        "ru": "смелый / храбрый",
+        "introduced": "2026-08-06"
       },
       {
-        "tr": "cömert",
-        "ru": "щедрый",
-        "introduced": "2026-08-02"
+        "tr": "utangaç",
+        "ru": "застенчивый / робкий",
+        "introduced": "2026-08-06"
       },
       {
-        "tr": "kibar",
-        "ru": "вежливый",
-        "introduced": "2026-08-02"
+        "tr": "dikkatsiz",
+        "ru": "невнимательный / небрежный",
+        "introduced": "2026-08-06"
       },
       {
-        "tr": "kaba",
-        "ru": "грубый",
-        "introduced": "2026-08-02"
+        "tr": "bencil",
+        "ru": "эгоистичный / себялюбивый",
+        "introduced": "2026-08-06"
       }
     ],
     "long_term": [
@@ -3358,6 +3358,54 @@
         "ru": "традиция",
         "introduced": "2026-07-30",
         "moved": "2026-08-02"
+      },
+      {
+        "tr": "gerçekleştirmek",
+        "ru": "осуществлять / реализовывать",
+        "introduced": "2026-08-02",
+        "moved": "2026-08-06"
+      },
+      {
+        "tr": "hedeflemek",
+        "ru": "нацеливаться / ставить целью",
+        "introduced": "2026-08-02",
+        "moved": "2026-08-06"
+      },
+      {
+        "tr": "değerlendirmek",
+        "ru": "оценивать / анализировать",
+        "introduced": "2026-08-02",
+        "moved": "2026-08-06"
+      },
+      {
+        "tr": "varsaymak",
+        "ru": "предполагать / допускать",
+        "introduced": "2026-08-02",
+        "moved": "2026-08-06"
+      },
+      {
+        "tr": "adet",
+        "ru": "обычай / традиция",
+        "introduced": "2026-08-02",
+        "moved": "2026-08-06"
+      },
+      {
+        "tr": "cömert",
+        "ru": "щедрый",
+        "introduced": "2026-08-02",
+        "moved": "2026-08-06"
+      },
+      {
+        "tr": "kibar",
+        "ru": "вежливый",
+        "introduced": "2026-08-02",
+        "moved": "2026-08-06"
+      },
+      {
+        "tr": "kaba",
+        "ru": "грубый",
+        "introduced": "2026-08-02",
+        "moved": "2026-08-06"
       }
     ]
   },
@@ -3572,45 +3620,6 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": {
-    "lesson_number": 54,
-    "lesson_title": "КОСВЕННАЯ РЕЧЬ — Суффиксы -DIğını/-EcEğini + глаголы речи (söylemek, demek, sanmak)",
-    "session_number": 2,
-    "is_new_lesson": false,
-    "new_words": [
-      {
-        "tr": "çıkarmak",
-        "ru": "делать вывод / выводить / извлекать"
-      },
-      {
-        "tr": "sezmek",
-        "ru": "чувствовать / улавливать / догадываться"
-      },
-      {
-        "tr": "kavramak",
-        "ru": "понимать / схватывать / осмыслять"
-      },
-      {
-        "tr": "tanıştırmak",
-        "ru": "знакомить (кого-то с кем-то)"
-      },
-      {
-        "tr": "cesur",
-        "ru": "смелый / храбрый"
-      },
-      {
-        "tr": "utangaç",
-        "ru": "застенчивый / робкий"
-      },
-      {
-        "tr": "dikkatsiz",
-        "ru": "невнимательный / небрежный"
-      },
-      {
-        "tr": "bencil",
-        "ru": "эгоистичный / себялюбивый"
-      }
-    ]
-  },
-  "pending_since": "2026-08-06"
+  "pending_manifest": null,
+  "pending_since": null
 }
