@@ -3620,6 +3620,45 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": null,
-  "pending_since": null
+  "pending_manifest": {
+    "lesson_number": 55,
+    "lesson_title": "КАУЗАТИВ — Суффиксы -DIr/-t/-Ir: «заставить сделать»",
+    "session_number": 1,
+    "is_new_lesson": true,
+    "new_words": [
+      {
+        "tr": "davet etmek",
+        "ru": "приглашать"
+      },
+      {
+        "tr": "desteklemek",
+        "ru": "поддерживать"
+      },
+      {
+        "tr": "kaydetmek",
+        "ru": "записывать / сохранять"
+      },
+      {
+        "tr": "silmek",
+        "ru": "стирать / вытирать"
+      },
+      {
+        "tr": "olgun",
+        "ru": "зрелый / спелый"
+      },
+      {
+        "tr": "verimli",
+        "ru": "продуктивный / плодородный"
+      },
+      {
+        "tr": "gereksiz",
+        "ru": "ненужный / лишний"
+      },
+      {
+        "tr": "etkili",
+        "ru": "эффективный / действенный"
+      }
+    ]
+  },
+  "pending_since": "2026-08-22"
 }
