@@ -20,9 +20,36 @@ from __future__ import annotations
 import os
 import re
 import sys
+import time
 
 import common
 import generate
+
+
+def _fetch_updates_resilient(offset: int) -> list[dict] | None:
+    """Читает getUpdates с одним retry при сетевых сбоях.
+
+    Возвращает список апдейтов или **None** если сетевая ошибка
+    случилась дважды. `None` → тихо выходим из poll без уведомления
+    ученика (следующий тик cron через 5 мин попробует ещё раз).
+    Настоящие ошибки Telegram API (400/403/ok:false) не ретраются —
+    они всплывут как обычное исключение.
+    """
+    for attempt in (1, 2):
+        try:
+            return common.get_updates(offset=offset, timeout=0)
+        except Exception as exc:  # noqa: BLE001
+            name = type(exc).__name__
+            is_network = any(x in name for x in (
+                "Timeout", "Connection", "Protocol", "Read", "Network",
+            ))
+            if not is_network:
+                raise  # логическая ошибка — пусть всплывает
+            print(f"[poll] getUpdates network try {attempt}: {name}: {exc}",
+                  file=sys.stderr)
+            if attempt == 1:
+                time.sleep(3)
+    return None
 
 
 HELP_TEXT = (
@@ -225,7 +252,11 @@ def main() -> int:
     chat_id = os.environ["TELEGRAM_CHAT_ID"]
     offset = common.load_offset()
 
-    updates = common.get_updates(offset=offset, timeout=0)
+    updates = _fetch_updates_resilient(offset)
+    if updates is None:
+        # два подряд сетевых сбоя — выходим тихо, не спамим ученика.
+        # Следующий cron-тик через 5 мин попробует снова.
+        return 0
     if not updates:
         return 0
 
@@ -278,10 +309,19 @@ def main() -> int:
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
+    except SystemExit:
+        raise
     except Exception as exc:
-        try:
-            common.send_message(f"poll_telegram: сбой: {exc}")
-        except Exception:
-            pass
-        print(f"[error] {exc}", file=sys.stderr)
+        name = type(exc).__name__
+        is_network = any(x in name for x in (
+            "Timeout", "Connection", "Protocol", "Read", "Network",
+        ))
+        # Сетевые сбои — только в stderr, без спама ученику. GH Actions
+        # retry через 5 минут сам поднимет полл.
+        if not is_network:
+            try:
+                common.send_message(f"poll_telegram: сбой: {exc}")
+            except Exception:
+                pass
+        print(f"[error] {name}: {exc}", file=sys.stderr)
         raise
