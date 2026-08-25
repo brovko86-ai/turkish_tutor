@@ -1,49 +1,49 @@
 {
   "current_lesson": 55,
   "lesson_title": "КАУЗАТИВ — Суффиксы -DIr/-t/-Ir: «заставить сделать»",
-  "session_number": 1,
-  "date": "2026-08-22",
+  "session_number": 2,
+  "date": "2026-08-24",
   "vocabulary_bank": {
     "active": [
       {
-        "tr": "davet etmek",
-        "ru": "приглашать",
-        "introduced": "2026-08-22"
+        "tr": "çekinmek",
+        "ru": "стесняться / воздерживаться",
+        "introduced": "2026-08-24"
       },
       {
-        "tr": "desteklemek",
-        "ru": "поддерживать",
-        "introduced": "2026-08-22"
+        "tr": "dayanmak",
+        "ru": "выдерживать / терпеть / опираться",
+        "introduced": "2026-08-24"
       },
       {
-        "tr": "kaydetmek",
-        "ru": "записывать / сохранять",
-        "introduced": "2026-08-22"
+        "tr": "yansımak",
+        "ru": "отражаться / находить отражение",
+        "introduced": "2026-08-24"
       },
       {
-        "tr": "silmek",
-        "ru": "стирать / вытирать",
-        "introduced": "2026-08-22"
+        "tr": "yer almak",
+        "ru": "занимать место / быть включённым",
+        "introduced": "2026-08-24"
       },
       {
-        "tr": "olgun",
-        "ru": "зрелый / спелый",
-        "introduced": "2026-08-22"
+        "tr": "yararlı",
+        "ru": "полезный",
+        "introduced": "2026-08-24"
       },
       {
-        "tr": "verimli",
-        "ru": "продуктивный / плодородный",
-        "introduced": "2026-08-22"
+        "tr": "zararlı",
+        "ru": "вредный",
+        "introduced": "2026-08-24"
       },
       {
-        "tr": "gereksiz",
-        "ru": "ненужный / лишний",
-        "introduced": "2026-08-22"
+        "tr": "kesinlikle değil",
+        "ru": "определённо нет / ни в коем случае",
+        "introduced": "2026-08-24"
       },
       {
-        "tr": "etkili",
-        "ru": "эффективный / действенный",
-        "introduced": "2026-08-22"
+        "tr": "belki de",
+        "ru": "пожалуй / возможно",
+        "introduced": "2026-08-24"
       }
     ],
     "long_term": [
@@ -3454,6 +3454,54 @@
         "ru": "эгоистичный / себялюбивый",
         "introduced": "2026-08-06",
         "moved": "2026-08-22"
+      },
+      {
+        "tr": "davet etmek",
+        "ru": "приглашать",
+        "introduced": "2026-08-22",
+        "moved": "2026-08-24"
+      },
+      {
+        "tr": "desteklemek",
+        "ru": "поддерживать",
+        "introduced": "2026-08-22",
+        "moved": "2026-08-24"
+      },
+      {
+        "tr": "kaydetmek",
+        "ru": "записывать / сохранять",
+        "introduced": "2026-08-22",
+        "moved": "2026-08-24"
+      },
+      {
+        "tr": "silmek",
+        "ru": "стирать / вытирать",
+        "introduced": "2026-08-22",
+        "moved": "2026-08-24"
+      },
+      {
+        "tr": "olgun",
+        "ru": "зрелый / спелый",
+        "introduced": "2026-08-22",
+        "moved": "2026-08-24"
+      },
+      {
+        "tr": "verimli",
+        "ru": "продуктивный / плодородный",
+        "introduced": "2026-08-22",
+        "moved": "2026-08-24"
+      },
+      {
+        "tr": "gereksiz",
+        "ru": "ненужный / лишний",
+        "introduced": "2026-08-22",
+        "moved": "2026-08-24"
+      },
+      {
+        "tr": "etkili",
+        "ru": "эффективный / действенный",
+        "introduced": "2026-08-22",
+        "moved": "2026-08-24"
       }
     ]
   },
@@ -3699,45 +3747,6 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": {
-    "lesson_number": 55,
-    "lesson_title": "КАУЗАТИВ — Суффиксы -DIr/-t/-Ir: «заставить сделать»",
-    "session_number": 2,
-    "is_new_lesson": false,
-    "new_words": [
-      {
-        "tr": "çekinmek",
-        "ru": "стесняться / воздерживаться"
-      },
-      {
-        "tr": "dayanmak",
-        "ru": "выдерживать / терпеть / опираться"
-      },
-      {
-        "tr": "yansımak",
-        "ru": "отражаться / находить отражение"
-      },
-      {
-        "tr": "yer almak",
-        "ru": "занимать место / быть включённым"
-      },
-      {
-        "tr": "yararlı",
-        "ru": "полезный"
-      },
-      {
-        "tr": "zararlı",
-        "ru": "вредный"
-      },
-      {
-        "tr": "kesinlikle değil",
-        "ru": "определённо нет / ни в коем случае"
-      },
-      {
-        "tr": "belki de",
-        "ru": "пожалуй / возможно"
-      }
-    ]
-  },
-  "pending_since": "2026-08-24"
+  "pending_manifest": null,
+  "pending_since": null
 }
