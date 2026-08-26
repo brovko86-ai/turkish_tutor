@@ -3747,6 +3747,45 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": null,
-  "pending_since": null
+  "pending_manifest": {
+    "lesson_number": 56,
+    "lesson_title": "ПАССИВ — Суффиксы -IL/-IN/-ÏNIL: «быть сделанным»",
+    "session_number": 1,
+    "is_new_lesson": true,
+    "new_words": [
+      {
+        "tr": "fırlatmak",
+        "ru": "бросать / запускать"
+      },
+      {
+        "tr": "kaçırmak",
+        "ru": "упускать / похищать"
+      },
+      {
+        "tr": "düşürmek",
+        "ru": "ронять / сбрасывать"
+      },
+      {
+        "tr": "kaldırmak",
+        "ru": "поднимать / убирать"
+      },
+      {
+        "tr": "selamlamak",
+        "ru": "приветствовать / здороваться"
+      },
+      {
+        "tr": "her halükarda",
+        "ru": "в любом случае / при любых обстоятельствах"
+      },
+      {
+        "tr": "özellikle",
+        "ru": "особенно / в особенности"
+      },
+      {
+        "tr": "aslında",
+        "ru": "на самом деле / вообще-то"
+      }
+    ]
+  },
+  "pending_since": "2026-08-26"
 }
