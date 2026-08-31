@@ -1,49 +1,49 @@
 {
-  "current_lesson": 55,
-  "lesson_title": "КАУЗАТИВ — Суффиксы -DIr/-t/-Ir: «заставить сделать»",
-  "session_number": 2,
-  "date": "2026-08-24",
+  "current_lesson": 56,
+  "lesson_title": "ПАССИВ — Суффиксы -IL/-IN/-ÏNIL: «быть сделанным»",
+  "session_number": 1,
+  "date": "2026-08-26",
   "vocabulary_bank": {
     "active": [
       {
-        "tr": "çekinmek",
-        "ru": "стесняться / воздерживаться",
-        "introduced": "2026-08-24"
+        "tr": "fırlatmak",
+        "ru": "бросать / запускать",
+        "introduced": "2026-08-26"
       },
       {
-        "tr": "dayanmak",
-        "ru": "выдерживать / терпеть / опираться",
-        "introduced": "2026-08-24"
+        "tr": "kaçırmak",
+        "ru": "упускать / похищать",
+        "introduced": "2026-08-26"
       },
       {
-        "tr": "yansımak",
-        "ru": "отражаться / находить отражение",
-        "introduced": "2026-08-24"
+        "tr": "düşürmek",
+        "ru": "ронять / сбрасывать",
+        "introduced": "2026-08-26"
       },
       {
-        "tr": "yer almak",
-        "ru": "занимать место / быть включённым",
-        "introduced": "2026-08-24"
+        "tr": "kaldırmak",
+        "ru": "поднимать / убирать",
+        "introduced": "2026-08-26"
       },
       {
-        "tr": "yararlı",
-        "ru": "полезный",
-        "introduced": "2026-08-24"
+        "tr": "selamlamak",
+        "ru": "приветствовать / здороваться",
+        "introduced": "2026-08-26"
       },
       {
-        "tr": "zararlı",
-        "ru": "вредный",
-        "introduced": "2026-08-24"
+        "tr": "her halükarda",
+        "ru": "в любом случае / при любых обстоятельствах",
+        "introduced": "2026-08-26"
       },
       {
-        "tr": "kesinlikle değil",
-        "ru": "определённо нет / ни в коем случае",
-        "introduced": "2026-08-24"
+        "tr": "özellikle",
+        "ru": "особенно / в особенности",
+        "introduced": "2026-08-26"
       },
       {
-        "tr": "belki de",
-        "ru": "пожалуй / возможно",
-        "introduced": "2026-08-24"
+        "tr": "aslında",
+        "ru": "на самом деле / вообще-то",
+        "introduced": "2026-08-26"
       }
     ],
     "long_term": [
@@ -3502,6 +3502,54 @@
         "ru": "эффективный / действенный",
         "introduced": "2026-08-22",
         "moved": "2026-08-24"
+      },
+      {
+        "tr": "çekinmek",
+        "ru": "стесняться / воздерживаться",
+        "introduced": "2026-08-24",
+        "moved": "2026-08-26"
+      },
+      {
+        "tr": "dayanmak",
+        "ru": "выдерживать / терпеть / опираться",
+        "introduced": "2026-08-24",
+        "moved": "2026-08-26"
+      },
+      {
+        "tr": "yansımak",
+        "ru": "отражаться / находить отражение",
+        "introduced": "2026-08-24",
+        "moved": "2026-08-26"
+      },
+      {
+        "tr": "yer almak",
+        "ru": "занимать место / быть включённым",
+        "introduced": "2026-08-24",
+        "moved": "2026-08-26"
+      },
+      {
+        "tr": "yararlı",
+        "ru": "полезный",
+        "introduced": "2026-08-24",
+        "moved": "2026-08-26"
+      },
+      {
+        "tr": "zararlı",
+        "ru": "вредный",
+        "introduced": "2026-08-24",
+        "moved": "2026-08-26"
+      },
+      {
+        "tr": "kesinlikle değil",
+        "ru": "определённо нет / ни в коем случае",
+        "introduced": "2026-08-24",
+        "moved": "2026-08-26"
+      },
+      {
+        "tr": "belki de",
+        "ru": "пожалуй / возможно",
+        "introduced": "2026-08-24",
+        "moved": "2026-08-26"
       }
     ]
   },
@@ -3552,9 +3600,10 @@
     52,
     53,
     54,
-    55
+    55,
+    56
   ],
-  "next_lesson": 56,
+  "next_lesson": 57,
   "weak_words": [
     {
       "tr": "ilerlemek",
@@ -3747,45 +3796,6 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": {
-    "lesson_number": 56,
-    "lesson_title": "ПАССИВ — Суффиксы -IL/-IN/-ÏNIL: «быть сделанным»",
-    "session_number": 1,
-    "is_new_lesson": true,
-    "new_words": [
-      {
-        "tr": "fırlatmak",
-        "ru": "бросать / запускать"
-      },
-      {
-        "tr": "kaçırmak",
-        "ru": "упускать / похищать"
-      },
-      {
-        "tr": "düşürmek",
-        "ru": "ронять / сбрасывать"
-      },
-      {
-        "tr": "kaldırmak",
-        "ru": "поднимать / убирать"
-      },
-      {
-        "tr": "selamlamak",
-        "ru": "приветствовать / здороваться"
-      },
-      {
-        "tr": "her halükarda",
-        "ru": "в любом случае / при любых обстоятельствах"
-      },
-      {
-        "tr": "özellikle",
-        "ru": "особенно / в особенности"
-      },
-      {
-        "tr": "aslında",
-        "ru": "на самом деле / вообще-то"
-      }
-    ]
-  },
-  "pending_since": "2026-08-26"
+  "pending_manifest": null,
+  "pending_since": null
 }
