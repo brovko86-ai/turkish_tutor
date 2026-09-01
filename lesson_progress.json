@@ -3796,6 +3796,45 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": null,
-  "pending_since": null
+  "pending_manifest": {
+    "lesson_number": 56,
+    "lesson_title": "ПАССИВ — Суффиксы -IL/-IN/-ÏNIL: «быть сделанным»",
+    "session_number": 2,
+    "is_new_lesson": false,
+    "new_words": [
+      {
+        "tr": "konuk etmek",
+        "ru": "принимать гостей / быть хозяином"
+      },
+      {
+        "tr": "veda etmek",
+        "ru": "прощаться / говорить до свидания"
+      },
+      {
+        "tr": "teşekkür etmek",
+        "ru": "благодарить / говорить спасибо"
+      },
+      {
+        "tr": "özür dilemek",
+        "ru": "извиняться / приносить извинения"
+      },
+      {
+        "tr": "teselli etmek",
+        "ru": "утешать / успокаивать"
+      },
+      {
+        "tr": "hüzünlenmek",
+        "ru": "грустить / становиться грустным"
+      },
+      {
+        "tr": "heyecanlanmak",
+        "ru": "волноваться / воодушевляться"
+      },
+      {
+        "tr": "gülümsemek",
+        "ru": "улыбаться"
+      }
+    ]
+  },
+  "pending_since": "2026-09-01"
 }
