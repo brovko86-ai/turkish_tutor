@@ -1,49 +1,49 @@
 {
   "current_lesson": 56,
   "lesson_title": "ПАССИВ — Суффиксы -IL/-IN/-ÏNIL: «быть сделанным»",
-  "session_number": 1,
-  "date": "2026-08-26",
+  "session_number": 2,
+  "date": "2026-09-01",
   "vocabulary_bank": {
     "active": [
       {
-        "tr": "fırlatmak",
-        "ru": "бросать / запускать",
-        "introduced": "2026-08-26"
+        "tr": "konuk etmek",
+        "ru": "принимать гостей / быть хозяином",
+        "introduced": "2026-09-01"
       },
       {
-        "tr": "kaçırmak",
-        "ru": "упускать / похищать",
-        "introduced": "2026-08-26"
+        "tr": "veda etmek",
+        "ru": "прощаться / говорить до свидания",
+        "introduced": "2026-09-01"
       },
       {
-        "tr": "düşürmek",
-        "ru": "ронять / сбрасывать",
-        "introduced": "2026-08-26"
+        "tr": "teşekkür etmek",
+        "ru": "благодарить / говорить спасибо",
+        "introduced": "2026-09-01"
       },
       {
-        "tr": "kaldırmak",
-        "ru": "поднимать / убирать",
-        "introduced": "2026-08-26"
+        "tr": "özür dilemek",
+        "ru": "извиняться / приносить извинения",
+        "introduced": "2026-09-01"
       },
       {
-        "tr": "selamlamak",
-        "ru": "приветствовать / здороваться",
-        "introduced": "2026-08-26"
+        "tr": "teselli etmek",
+        "ru": "утешать / успокаивать",
+        "introduced": "2026-09-01"
       },
       {
-        "tr": "her halükarda",
-        "ru": "в любом случае / при любых обстоятельствах",
-        "introduced": "2026-08-26"
+        "tr": "hüzünlenmek",
+        "ru": "грустить / становиться грустным",
+        "introduced": "2026-09-01"
       },
       {
-        "tr": "özellikle",
-        "ru": "особенно / в особенности",
-        "introduced": "2026-08-26"
+        "tr": "heyecanlanmak",
+        "ru": "волноваться / воодушевляться",
+        "introduced": "2026-09-01"
       },
       {
-        "tr": "aslında",
-        "ru": "на самом деле / вообще-то",
-        "introduced": "2026-08-26"
+        "tr": "gülümsemek",
+        "ru": "улыбаться",
+        "introduced": "2026-09-01"
       }
     ],
     "long_term": [
@@ -3550,6 +3550,54 @@
         "ru": "пожалуй / возможно",
         "introduced": "2026-08-24",
         "moved": "2026-08-26"
+      },
+      {
+        "tr": "fırlatmak",
+        "ru": "бросать / запускать",
+        "introduced": "2026-08-26",
+        "moved": "2026-09-01"
+      },
+      {
+        "tr": "kaçırmak",
+        "ru": "упускать / похищать",
+        "introduced": "2026-08-26",
+        "moved": "2026-09-01"
+      },
+      {
+        "tr": "düşürmek",
+        "ru": "ронять / сбрасывать",
+        "introduced": "2026-08-26",
+        "moved": "2026-09-01"
+      },
+      {
+        "tr": "kaldırmak",
+        "ru": "поднимать / убирать",
+        "introduced": "2026-08-26",
+        "moved": "2026-09-01"
+      },
+      {
+        "tr": "selamlamak",
+        "ru": "приветствовать / здороваться",
+        "introduced": "2026-08-26",
+        "moved": "2026-09-01"
+      },
+      {
+        "tr": "her halükarda",
+        "ru": "в любом случае / при любых обстоятельствах",
+        "introduced": "2026-08-26",
+        "moved": "2026-09-01"
+      },
+      {
+        "tr": "özellikle",
+        "ru": "особенно / в особенности",
+        "introduced": "2026-08-26",
+        "moved": "2026-09-01"
+      },
+      {
+        "tr": "aslında",
+        "ru": "на самом деле / вообще-то",
+        "introduced": "2026-08-26",
+        "moved": "2026-09-01"
       }
     ]
   },
@@ -3796,45 +3844,6 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": {
-    "lesson_number": 56,
-    "lesson_title": "ПАССИВ — Суффиксы -IL/-IN/-ÏNIL: «быть сделанным»",
-    "session_number": 2,
-    "is_new_lesson": false,
-    "new_words": [
-      {
-        "tr": "konuk etmek",
-        "ru": "принимать гостей / быть хозяином"
-      },
-      {
-        "tr": "veda etmek",
-        "ru": "прощаться / говорить до свидания"
-      },
-      {
-        "tr": "teşekkür etmek",
-        "ru": "благодарить / говорить спасибо"
-      },
-      {
-        "tr": "özür dilemek",
-        "ru": "извиняться / приносить извинения"
-      },
-      {
-        "tr": "teselli etmek",
-        "ru": "утешать / успокаивать"
-      },
-      {
-        "tr": "hüzünlenmek",
-        "ru": "грустить / становиться грустным"
-      },
-      {
-        "tr": "heyecanlanmak",
-        "ru": "волноваться / воодушевляться"
-      },
-      {
-        "tr": "gülümsemek",
-        "ru": "улыбаться"
-      }
-    ]
-  },
-  "pending_since": "2026-09-01"
+  "pending_manifest": null,
+  "pending_since": null
 }
