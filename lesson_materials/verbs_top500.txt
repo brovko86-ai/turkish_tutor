@@ -1,0 +1,495 @@
+# ТОП-500 глаголов турецкого. Формат: tr|en|код управления (A=-ı/-i, D=-a/-e, B=-dan/-den, L=-la, N=нет)
+olmak|to be / become|N
+etmek|to do / make|A
+yapmak|to do / make|A
+demek|to say|A
+gelmek|to come|D
+gitmek|to go|D
+vermek|to give|D
+almak|to take / get|A
+bilmek|to know|A
+görmek|to see|A
+istemek|to want|A
+kalmak|to stay / remain|D
+çıkmak|to go out / come out|B
+girmek|to enter|D
+bulmak|to find|A
+koymak|to put|A
+bakmak|to look|D
+söylemek|to tell / say|A
+konuşmak|to speak|L
+düşünmek|to think|A
+anlamak|to understand|A
+çalışmak|to work / study|N
+yaşamak|to live|N
+başlamak|to begin|D
+bitirmek|to finish|A
+bitmek|to end|N
+devam etmek|to continue|D
+kullanmak|to use|A
+yazmak|to write|A
+okumak|to read / study|A
+dinlemek|to listen|A
+duymak|to hear|A
+sormak|to ask|A
+cevap vermek|to answer|D
+beklemek|to wait|A
+aramak|to search / call|A
+çağırmak|to call / invite|A
+getirmek|to bring|A
+götürmek|to take (away)|A
+taşımak|to carry|A
+yürümek|to walk|N
+koşmak|to run|N
+uçmak|to fly|N
+yüzmek|to swim|N
+oturmak|to sit / live|N
+kalkmak|to get up|N
+yatmak|to lie down|N
+uyumak|to sleep|N
+uyanmak|to wake up|N
+yemek|to eat|A
+içmek|to drink|A
+pişirmek|to cook|A
+hazırlamak|to prepare|A
+açmak|to open|A
+kapatmak|to close|A
+kapanmak|to be closed|N
+sevmek|to love / like|A
+beğenmek|to like / admire|A
+hoşlanmak|to enjoy / like|B
+nefret etmek|to hate|B
+korkmak|to fear|B
+üzülmek|to be sad|B
+sevinmek|to rejoice|D
+gülmek|to laugh|D
+ağlamak|to cry|N
+kızmak|to get angry|D
+merak etmek|to wonder / be curious|A
+umut etmek|to hope|A
+ummak|to hope / expect|A
+inanmak|to believe|D
+güvenmek|to trust|D
+şüphe etmek|to doubt|B
+hatırlamak|to remember|A
+unutmak|to forget|A
+öğrenmek|to learn|A
+öğretmek|to teach|A
+eğitmek|to educate / train|A
+denemek|to try|A
+başarmak|to succeed / achieve|A
+kazanmak|to win / earn|A
+kaybetmek|to lose|A
+yenmek|to defeat|A
+yenilmek|to be defeated|B
+oynamak|to play|L
+izlemek|to watch / follow|A
+seyretmek|to watch|A
+dinlenmek|to rest|N
+gezmek|to tour / stroll|N
+dolaşmak|to wander|N
+seyahat etmek|to travel|N
+ulaşmak|to reach|D
+varmak|to arrive|D
+dönmek|to return / turn|N
+geri dönmek|to go back|D
+ayrılmak|to leave / separate|B
+terk etmek|to abandon|A
+bırakmak|to leave / let go|A
+tutmak|to hold / keep|A
+vurmak|to hit|A
+atmak|to throw|A
+çekmek|to pull / draw|A
+itmek|to push|A
+kaldırmak|to lift / remove|A
+indirmek|to lower / download|A
+inmek|to descend / get off|B
+binmek|to ride / get on|D
+çıkarmak|to take out / remove|A
+yerleştirmek|to place / settle|A
+yerleşmek|to settle|D
+taşınmak|to move (house)|D
+toplamak|to collect / add|A
+toplanmak|to gather|N
+dağıtmak|to distribute / scatter|A
+paylaşmak|to share|A
+bölmek|to divide|A
+birleştirmek|to unite / combine|A
+ayırmak|to separate / set aside|A
+karıştırmak|to mix / confuse|A
+karışmak|to interfere / mix|D
+bağlamak|to tie / connect|A
+bağlanmak|to attach oneself|D
+çözmek|to solve / untie|A
+kesmek|to cut|A
+kırmak|to break|A
+kırılmak|to be broken / offended|N
+yırtmak|to tear|A
+yakmak|to burn / light|A
+yanmak|to burn (intr.)|N
+söndürmek|to extinguish|A
+dökmek|to pour / spill|A
+doldurmak|to fill|A
+dolmak|to fill up|B
+boşaltmak|to empty|A
+temizlemek|to clean|A
+yıkamak|to wash|A
+silmek|to wipe / erase|A
+süpürmek|to sweep|A
+ütülemek|to iron|A
+giymek|to wear|A
+takmak|to attach / wear (accessory)|A
+dikmek|to sew / plant|A
+örmek|to knit / weave|A
+boyamak|to paint / dye|A
+çizmek|to draw|A
+resim yapmak|to paint a picture|N
+şarkı söylemek|to sing|N
+dans etmek|to dance|N
+çalmak|to play (instrument) / steal|A
+satın almak|to buy|A
+satmak|to sell|A
+ödemek|to pay|A
+harcamak|to spend|A
+biriktirmek|to save up|A
+borç almak|to borrow|B
+borç vermek|to lend|D
+kiralamak|to rent|A
+kiraya vermek|to rent out|D
+yatırım yapmak|to invest|N
+fiyat sormak|to ask the price|N
+pazarlık etmek|to bargain|N
+gerekmek|to be necessary|N
+lazım olmak|to be needed|N
+değmek|to be worth / touch|D
+benzemek|to resemble|D
+görünmek|to appear / seem|N
+gözükmek|to appear|N
+sanmak|to suppose / think|A
+zannetmek|to suppose|A
+tahmin etmek|to guess|A
+varsaymak|to assume|A
+hissetmek|to feel|A
+duyumsamak|to sense|A
+sezmek|to sense|A
+fark etmek|to notice|A
+dikkat etmek|to pay attention|D
+önemsemek|to consider important|A
+saymak|to count / respect|A
+hesaplamak|to calculate|A
+ölçmek|to measure|A
+tartmak|to weigh|A
+karşılaştırmak|to compare|A
+seçmek|to choose|A
+tercih etmek|to prefer|A
+karar vermek|to decide|D
+kararlaştırmak|to decide upon|A
+planlamak|to plan|A
+düzenlemek|to arrange / organize|A
+organize etmek|to organize|A
+yönetmek|to manage / direct|A
+idare etmek|to manage|A
+kontrol etmek|to check / control|A
+denetlemek|to supervise / audit|A
+yoklamak|to check / feel|A
+test etmek|to test|A
+incelemek|to examine|A
+araştırmak|to research|A
+keşfetmek|to discover|A
+buluşmak|to meet up|L
+tanışmak|to get acquainted|L
+tanımak|to know (a person)|A
+tanıtmak|to introduce / promote|A
+görüşmek|to meet / talk|L
+toplantı yapmak|to hold a meeting|N
+davet etmek|to invite|A
+kabul etmek|to accept|A
+reddetmek|to reject|A
+onaylamak|to approve|A
+izin vermek|to permit|D
+yasaklamak|to ban|A
+engellemek|to prevent|A
+durdurmak|to stop (tr.)|A
+durmak|to stop / stand|N
+bekletmek|to keep waiting|A
+acele etmek|to hurry|N
+gecikmek|to be late|B
+yetişmek|to catch up / reach|D
+yetmek|to be enough|D
+yeterli olmak|to be sufficient|N
+artmak|to increase|N
+çoğalmak|to multiply|N
+azalmak|to decrease|N
+azaltmak|to reduce|A
+arttırmak|to increase (tr.)|A
+yükselmek|to rise|N
+yükseltmek|to raise|A
+düşmek|to fall|D
+düşürmek|to drop|A
+büyümek|to grow|N
+büyütmek|to enlarge / raise|A
+küçülmek|to shrink|N
+küçültmek|to make smaller|A
+genişlemek|to widen|N
+genişletmek|to expand|A
+uzamak|to lengthen|N
+uzatmak|to extend / hand over|A
+kısalmak|to shorten (intr.)|N
+kısaltmak|to shorten|A
+ağırlaşmak|to get heavy|N
+hafiflemek|to lighten|N
+ısınmak|to warm up|N
+ısıtmak|to heat|A
+soğumak|to cool down|N
+soğutmak|to cool|A
+donmak|to freeze|N
+erimek|to melt|N
+kurumak|to dry up|N
+kurutmak|to dry|A
+islanmak|to get wet|N
+ıslatmak|to wet|A
+parlamak|to shine|N
+aydınlatmak|to light up / clarify|A
+kararmak|to get dark|N
+değişmek|to change (intr.)|N
+değiştirmek|to change (tr.)|A
+dönüştürmek|to transform|A
+dönüşmek|to turn into|D
+gelişmek|to develop|N
+geliştirmek|to develop (tr.)|A
+ilerlemek|to progress|N
+iyileşmek|to recover|N
+iyileştirmek|to improve / heal|A
+kötüleşmek|to get worse|N
+bozulmak|to break down / spoil|N
+bozmak|to spoil / break|A
+onarmak|to repair|A
+tamir etmek|to repair|A
+yapılmak|to be made|N
+yaratmak|to create|A
+oluşturmak|to form / create|A
+oluşmak|to form (intr.)|B
+kurmak|to establish / set up|A
+kurulmak|to be established|N
+inşa etmek|to build|A
+yıkmak|to demolish|A
+yıkılmak|to collapse|N
+üretmek|to produce|A
+tüketmek|to consume|A
+geçmek|to pass|D
+geçirmek|to spend (time) / pass|A
+sürmek|to last / drive|N
+sürdürmek|to continue (tr.)|A
+kullanılmak|to be used|N
+yararlanmak|to benefit|B
+faydalanmak|to benefit|B
+sahip olmak|to own / have|D
+bulunmak|to be present / be found|N
+yer almak|to take place|N
+meydana gelmek|to occur|N
+gerçekleşmek|to come true / happen|N
+yaşanmak|to be experienced|N
+karşılaşmak|to encounter|L
+rastlamak|to come across|D
+çarpmak|to hit / multiply|D
+çarpışmak|to collide / clash|L
+kavga etmek|to fight|L
+savaşmak|to fight (war)|L
+mücadele etmek|to struggle|L
+saldırmak|to attack|D
+korumak|to protect|A
+savunmak|to defend|A
+kurtarmak|to save / rescue|A
+kurtulmak|to escape / get rid of|B
+kaçmak|to escape / run away|B
+saklamak|to hide (tr.)|A
+saklanmak|to hide (intr.)|B
+gizlemek|to conceal|A
+göstermek|to show|D
+anlatmak|to tell / explain|A
+açıklamak|to explain / announce|A
+tarif etmek|to describe / give directions|A
+tanımlamak|to define|A
+belirtmek|to indicate|A
+bildirmek|to notify / report|A
+haber vermek|to inform|D
+duyurmak|to announce|A
+çevirmek|to translate / turn|A
+yorumlamak|to interpret|A
+eleştirmek|to criticize|A
+övmek|to praise|A
+şikayet etmek|to complain|B
+yalan söylemek|to lie|N
+doğru söylemek|to tell the truth|N
+sır tutmak|to keep a secret|N
+bağırmak|to shout|D
+fısıldamak|to whisper|N
+tartışmak|to argue / discuss|A
+konuşturmak|to make talk|A
+cevaplamak|to answer|A
+yanıtlamak|to reply|A
+sözleşmek|to agree / make a deal|N
+anlaşmak|to agree / get along|L
+uyuşmak|to agree / go numb|L
+uymak|to fit / comply|D
+uydurmak|to make up / adapt|A
+alışmak|to get used to|D
+alıştırmak|to accustom|A
+yadırgamak|to find strange|A
+şaşırmak|to be surprised|D
+şaşırtmak|to surprise|A
+korkutmak|to scare|A
+sevindirmek|to make happy|A
+üzmek|to upset|A
+kızdırmak|to anger|A
+gülümsemek|to smile|D
+öpmek|to kiss|A
+sarılmak|to hug|D
+evlenmek|to marry|L
+boşanmak|to divorce|B
+doğmak|to be born|N
+doğurmak|to give birth|A
+ölmek|to die|N
+öldürmek|to kill|A
+gömmek|to bury|A
+hastalanmak|to fall ill|N
+ağrımak|to ache|N
+acımak|to hurt / pity|D
+tedavi etmek|to treat|A
+ilaç almak|to take medicine|N
+nefes almak|to breathe|N
+öksürmek|to cough|N
+hapşırmak|to sneeze|N
+terlemek|to sweat|N
+titremek|to tremble|N
+sarsılmak|to shake (intr.)|N
+sallamak|to shake / wave|A
+sallanmak|to swing / sway|N
+zıplamak|to jump|N
+atlamak|to jump / skip|D
+tırmanmak|to climb|D
+kaymak|to slip / ski|N
+sürünmek|to crawl|N
+emeklemek|to crawl (baby)|N
+koklamak|to smell|A
+tatmak|to taste|A
+dokunmak|to touch|D
+tutuşmak|to catch fire|N
+silkelemek|to shake off|A
+sıkmak|to squeeze / bore|A
+sıkılmak|to be bored|B
+ezmek|to crush|A
+doğramak|to chop|A
+kızartmak|to fry|A
+haşlamak|to boil|A
+kaynatmak|to boil (tr.)|A
+kaynamak|to boil (intr.)|N
+pişmek|to cook (intr.)|N
+yoğurmak|to knead|A
+tatlandırmak|to sweeten|A
+ikram etmek|to offer (food/drink)|D
+doyurmak|to feed|A
+doymak|to be full|B
+acıkmak|to get hungry|N
+susamak|to get thirsty|N
+susmak|to be silent|N
+bağırtmak|to make shout|A
+mırıldanmak|to mutter / hum|N
+haykırmak|to cry out|N
+fısıldaşmak|to whisper together|N
+başvurmak|to apply|D
+başvuru yapmak|to submit an application|N
+işe girmek|to start a job|N
+işten çıkmak|to leave work|B
+işten çıkarmak|to fire|A
+istifa etmek|to resign|B
+emekli olmak|to retire|N
+terfi etmek|to be promoted|N
+atamak|to appoint|A
+atanmak|to be appointed|D
+seçilmek|to be elected|N
+oy vermek|to vote|D
+katılmak|to participate / join|D
+katmak|to add|D
+eklemek|to add|D
+imzalamak|to sign|A
+göndermek|to send|D
+yollamak|to send|D
+iletmek|to convey|D
+teslim etmek|to deliver|D
+teslim almak|to receive (delivery)|A
+kabullenmek|to accept|A
+paketlemek|to pack|A
+sarmak|to wrap|A
+bağışlamak|to donate|A
+affetmek|to forgive|A
+cezalandırmak|to punish|A
+ödüllendirmek|to reward|A
+suçlamak|to accuse|A
+savunma yapmak|to make a defense|N
+yargılamak|to judge / try|A
+mahkum etmek|to convict|A
+tutuklamak|to arrest|A
+serbest bırakmak|to release|A
+yakalamak|to catch|A
+takip etmek|to follow|A
+peşinden gitmek|to follow after|N
+rehberlik etmek|to guide|D
+yol göstermek|to show the way|D
+yönelmek|to turn towards|D
+yöneltmek|to direct towards|A
+amaçlamak|to aim|A
+hedeflemek|to target|A
+çabalamak|to strive|N
+uğraşmak|to struggle / deal with|L
+zorlamak|to force|A
+zorlanmak|to struggle / have difficulty|N
+kolaylaştırmak|to facilitate|A
+zorlaştırmak|to make difficult|A
+basitleştirmek|to simplify|A
+özetlemek|to summarize|A
+tekrar etmek|to repeat|A
+tekrarlamak|to repeat|A
+ezberlemek|to memorize|A
+çalıştırmak|to operate / employ|A
+kullandırmak|to make use|A
+yaptırmak|to have made|A
+yazdırmak|to have written / print|A
+okutmak|to have read / teach|A
+ettirmek|to make do|A
+gösterilmek|to be shown|N
+söylenmek|to be said / mutter|N
+bilinmek|to be known|N
+sevilmek|to be loved|N
+beklenmek|to be expected|N
+görülmek|to be seen|N
+verilmek|to be given|N
+alınmak|to be taken / be offended|N
+tutulmak|to be held|N
+kaybolmak|to get lost|N
+kaybettirmek|to make lose|A
+yitirmek|to lose|A
+bulaşmak|to be contagious / get dirty|D
+bulaştırmak|to infect / stain|A
+kirlenmek|to get dirty|N
+kirletmek|to pollute|A
+eskimek|to age / wear out|N
+yenilemek|to renew|A
+yenilenmek|to be renewed|N
+tazelemek|to refresh|A
+güncellemek|to update|A
+yüklemek|to load / upload|A
+yüklenmek|to be loaded|N
+kaydetmek|to save / record|A
+kaydolmak|to register|D
+silinmek|to be deleted|N
+tıklamak|to click|D
+paylaşılmak|to be shared|N
+bağlantı kurmak|to make a connection|L
+arama yapmak|to make a call / search|N
+mesaj atmak|to send a message|D
+cevap yazmak|to write back|D
+telefon etmek|to phone|D
+şarj etmek|to charge|A
+açılmak|to open (intr.)|N
+başlatmak|to start (tr.)|A

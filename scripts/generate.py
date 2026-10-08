@@ -266,6 +266,44 @@ _EXTRA_VERBS_B2: list[tuple[str, str, str]] = [
     ("dinlenmek",     "to rest",                            "—"),
     ("uğraşmak",      "to deal with / try hard",            "-la"),
     ("başarmak",      "to succeed / accomplish",            "-ı, -i"),
+
+    # === ВОЛНА 3 (2026-10-08): пул был исчерпан, добавлено ещё 36 ===
+    ("kıvanmak"       , "to be proud / pleased", "-la"),
+    ("ürkmek"         , "to be startled / shy away", "-dan, -den"),
+    ("direnmek"       , "to resist", "-a, -e"),
+    ("sürüklemek"     , "to drag", "-ı, -i"),
+    ("savurmak"       , "to hurl / squander", "-ı, -i"),
+    ("sıyırmak"       , "to peel off / graze", "-ı, -i"),
+    ("kuşatmak"       , "to surround / besiege", "-ı, -i"),
+    ("benimsemek"     , "to adopt / embrace", "-ı, -i"),
+    ("yadsımak"       , "to deny / reject", "-ı, -i"),
+    ("önemsemek"      , "to care about / take seriously", "-ı, -i"),
+    ("küçümsemek"     , "to belittle", "-ı, -i"),
+    ("sorgulamak"     , "to question / interrogate", "-ı, -i"),
+    ("aşmak"          , "to overcome / cross", "-ı, -i"),
+    ("kavuşmak"       , "to reunite with / reach", "-a, -e"),
+    ("sığınmak"       , "to take refuge", "-a, -e"),
+    ("sakınmak"       , "to avoid / beware of", "-dan, -den"),
+    ("esinlenmek"     , "to be inspired", "-dan, -den"),
+    ("yüklenmek"      , "to take upon oneself", "-a, -e"),
+    ("kanıtlamak"     , "to prove", "-ı, -i"),
+    ("çürütmek"       , "to refute / rot", "-ı, -i"),
+    ("vazgeçmek"      , "to give up", "-dan, -den"),
+    ("tırmanmak"      , "to climb", "-a, -e"),
+    ("sızmak"         , "to leak / seep", "-dan, -den"),
+    ("titremek"       , "to tremble", "—"),
+    ("sarılmak"       , "to hug / embrace", "-a, -e"),
+    ("kucaklamak"     , "to embrace / hug", "-ı, -i"),
+    ("kovalamak"      , "to chase", "-ı, -i"),
+    ("tuzağa düşmek"  , "to fall into a trap", "—"),
+    ("fark etmek"     , "to notice", "-ı, -i"),
+    ("ilan etmek"     , "to announce", "-ı, -i"),
+    ("şikâyet etmek"  , "to complain", "-dan, -den"),
+    ("takdir etmek"   , "to appreciate", "-ı, -i"),
+    ("sürdürmek"      , "to continue / sustain", "-ı, -i"),
+    ("gözlemlemek"    , "to observe", "-ı, -i"),
+    ("kıyaslamak"     , "to compare", "-ı, -i"),
+    ("uyarlamak"      , "to adapt", "-ı, -i"),
 ]
 
 
@@ -316,6 +354,68 @@ _EXTRA_NON_VERBS_B2: list[tuple[str, str]] = [
     ("her halükarda",  "in any case"),
     ("özellikle",      "especially"),
     ("aslında",        "actually / in fact"),
+
+    # === ВОЛНА 2 (2026-10-08): пул был исчерпан, добавлено ещё 60 ===
+    ("kıskançlık"     , "jealousy"),
+    ("güven"          , "trust"),
+    ("vicdan"         , "conscience"),
+    ("onur"           , "honour / dignity"),
+    ("sorumsuz"       , "irresponsible"),
+    ("tutarlı"        , "consistent"),
+    ("tutarsız"       , "inconsistent"),
+    ("sade"           , "plain / simple"),
+    ("karmaşık"       , "complex"),
+    ("belirsiz"       , "uncertain / vague"),
+    ("kararlı"        , "determined"),
+    ("kararsız"       , "indecisive"),
+    ("inatçı"         , "stubborn"),
+    ("hırslı"         , "ambitious"),
+    ("tembel"         , "lazy"),
+    ("çalışkan"       , "hard-working"),
+    ("sinirli"        , "irritable"),
+    ("sakin"          , "calm"),
+    ("neşeli"         , "cheerful"),
+    ("öfke"           , "anger"),
+    ("endişe"         , "worry"),
+    ("sevinç"         , "joy"),
+    ("üzüntü"         , "sorrow"),
+    ("pişmanlık"      , "regret"),
+    ("sınır"          , "border / limit"),
+    ("engel"          , "obstacle"),
+    ("tehlike"        , "danger"),
+    ("yöntem"         , "method"),
+    ("istisna"        , "exception"),
+    ("benzer"         , "similar"),
+    ("farklı"         , "different"),
+    ("zorunlu"        , "compulsory"),
+    ("gönüllü"        , "voluntary"),
+    ("geçici"         , "temporary"),
+    ("kalıcı"         , "permanent"),
+    ("ortak"          , "common / partner"),
+    ("bağımsız"       , "independent"),
+    ("çevre"          , "environment / surroundings"),
+    ("devlet"         , "state"),
+    ("hukuk"          , "law"),
+    ("hak"            , "right"),
+    ("görev"          , "duty / task"),
+    ("gelişme"        , "development"),
+    ("değişim"        , "change"),
+    ("yenilgi"        , "defeat"),
+    ("zafer"          , "victory"),
+    ("anı"            , "memory"),
+    ("geçmiş"         , "past"),
+    ("şimdilik"       , "for now"),
+    ("giderek"        , "gradually"),
+    ("hâlâ"           , "still"),
+    ("zaten"          , "anyway / already"),
+    ("neredeyse"      , "almost"),
+    ("üstelik"        , "moreover"),
+    ("ayrıca"         , "besides"),
+    ("bu yüzden"      , "therefore"),
+    ("öte yandan"     , "on the other hand"),
+    ("buna rağmen"    , "despite this"),
+    ("kısacası"       , "in short"),
+    ("açıkçası"       , "frankly"),
 ]
 
 
@@ -374,6 +474,26 @@ def _parse_verbs_master_list() -> list[tuple[str, str, str]]:
     return out
 
 
+_TOP500_FILE = common.REPO_ROOT / "lesson_materials" / "verbs_top500.txt"
+_TOP500_OBJ = {"A": "-ı, -i", "D": "-a, -e", "B": "-dan, -den", "L": "-la", "N": "—"}
+
+
+def _parse_top500() -> list[tuple[str, str, str]]:
+    """ТОП-500 глаголов: строки `tr|en|код`, комментарии с `#`."""
+    if not _TOP500_FILE.exists():
+        return []
+    out: list[tuple[str, str, str]] = []
+    for ln in _TOP500_FILE.read_text(encoding="utf-8").splitlines():
+        ln = ln.strip()
+        if not ln or ln.startswith("#"):
+            continue
+        parts = ln.split("|")
+        if len(parts) == 3:
+            out.append((parts[0].strip(), parts[1].strip(),
+                        _TOP500_OBJ.get(parts[2].strip(), "—")))
+    return out
+
+
 def _verbs_pool(progress: dict, limit: int = VERBS_POOL_SIZE) -> list[tuple[str, str, str]]:
     """Топ-N глаголов, которые ученик ещё НЕ знает. Сначала берём из
     verbs_master_list (ТОП-200 Cowork), потом добираем из встроенного
@@ -382,7 +502,7 @@ def _verbs_pool(progress: dict, limit: int = VERBS_POOL_SIZE) -> list[tuple[str,
     known = _known_words(progress)
     result: list[tuple[str, str, str]] = []
     seen: set[str] = set()
-    for source in (_parse_verbs_master_list(), _EXTRA_VERBS_B2):
+    for source in (_parse_verbs_master_list(), _parse_top500(), _EXTRA_VERBS_B2):
         for tr, en, obj in source:
             key = tr.strip().lower()
             if key in known or key in seen:
