@@ -4105,6 +4105,45 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": null,
-  "pending_since": null
+  "pending_manifest": {
+    "lesson_number": 60,
+    "lesson_title": "ПАССИВ — Суффиксы -IL/-IN/-ÜL/-UN: «быть сделанным»",
+    "session_number": 1,
+    "is_new_lesson": true,
+    "new_words": [
+      {
+        "tr": "yenilmek",
+        "ru": "быть побеждённым / потерпеть поражение"
+      },
+      {
+        "tr": "seyretmek",
+        "ru": "смотреть / наблюдать"
+      },
+      {
+        "tr": "ulaşmak",
+        "ru": "достигать / добираться"
+      },
+      {
+        "tr": "varmak",
+        "ru": "прибывать / добираться"
+      },
+      {
+        "tr": "sinirli",
+        "ru": "раздражительный / нервный"
+      },
+      {
+        "tr": "sakin",
+        "ru": "спокойный / тихий"
+      },
+      {
+        "tr": "neşeli",
+        "ru": "весёлый / жизнерадостный"
+      },
+      {
+        "tr": "öfke",
+        "ru": "гнев / злость"
+      }
+    ]
+  },
+  "pending_since": "2026-10-31"
 }
