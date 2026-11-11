@@ -1,49 +1,49 @@
 {
-  "current_lesson": 59,
-  "lesson_title": "КАУЗАТИВ — Суффиксы -DIR/-T/-IR: «заставить сделать»",
-  "session_number": 2,
-  "date": "2026-10-24",
+  "current_lesson": 60,
+  "lesson_title": "ПАССИВ — Суффиксы -IL/-IN/-ÜL/-UN: «быть сделанным»",
+  "session_number": 1,
+  "date": "2026-10-31",
   "vocabulary_bank": {
     "active": [
       {
-        "tr": "şüphe etmek",
-        "ru": "сомневаться",
-        "introduced": "2026-10-24"
+        "tr": "yenilmek",
+        "ru": "быть побеждённым / потерпеть поражение",
+        "introduced": "2026-10-31"
       },
       {
-        "tr": "eğitmek",
-        "ru": "обучать / тренировать",
-        "introduced": "2026-10-24"
+        "tr": "seyretmek",
+        "ru": "смотреть / наблюдать",
+        "introduced": "2026-10-31"
       },
       {
-        "tr": "başarmak",
-        "ru": "добиться успеха / достичь",
-        "introduced": "2026-10-24"
+        "tr": "ulaşmak",
+        "ru": "достигать / добираться",
+        "introduced": "2026-10-31"
       },
       {
-        "tr": "yenmek",
-        "ru": "победить / одолеть",
-        "introduced": "2026-10-24"
+        "tr": "varmak",
+        "ru": "прибывать / добираться",
+        "introduced": "2026-10-31"
       },
       {
-        "tr": "inatçı",
-        "ru": "упрямый / упорный",
-        "introduced": "2026-10-24"
+        "tr": "sinirli",
+        "ru": "раздражительный / нервный",
+        "introduced": "2026-10-31"
       },
       {
-        "tr": "hırslı",
-        "ru": "амбициозный / честолюбивый",
-        "introduced": "2026-10-24"
+        "tr": "sakin",
+        "ru": "спокойный / тихий",
+        "introduced": "2026-10-31"
       },
       {
-        "tr": "tembel",
-        "ru": "ленивый",
-        "introduced": "2026-10-24"
+        "tr": "neşeli",
+        "ru": "весёлый / жизнерадостный",
+        "introduced": "2026-10-31"
       },
       {
-        "tr": "çalışkan",
-        "ru": "трудолюбивый / усердный",
-        "introduced": "2026-10-24"
+        "tr": "öfke",
+        "ru": "гнев / злость",
+        "introduced": "2026-10-31"
       }
     ],
     "long_term": [
@@ -3886,6 +3886,54 @@
         "ru": "нерешительный / колеблющийся",
         "introduced": "2026-10-16",
         "moved": "2026-10-24"
+      },
+      {
+        "tr": "şüphe etmek",
+        "ru": "сомневаться",
+        "introduced": "2026-10-24",
+        "moved": "2026-10-31"
+      },
+      {
+        "tr": "eğitmek",
+        "ru": "обучать / тренировать",
+        "introduced": "2026-10-24",
+        "moved": "2026-10-31"
+      },
+      {
+        "tr": "başarmak",
+        "ru": "добиться успеха / достичь",
+        "introduced": "2026-10-24",
+        "moved": "2026-10-31"
+      },
+      {
+        "tr": "yenmek",
+        "ru": "победить / одолеть",
+        "introduced": "2026-10-24",
+        "moved": "2026-10-31"
+      },
+      {
+        "tr": "inatçı",
+        "ru": "упрямый / упорный",
+        "introduced": "2026-10-24",
+        "moved": "2026-10-31"
+      },
+      {
+        "tr": "hırslı",
+        "ru": "амбициозный / честолюбивый",
+        "introduced": "2026-10-24",
+        "moved": "2026-10-31"
+      },
+      {
+        "tr": "tembel",
+        "ru": "ленивый",
+        "introduced": "2026-10-24",
+        "moved": "2026-10-31"
+      },
+      {
+        "tr": "çalışkan",
+        "ru": "трудолюбивый / усердный",
+        "introduced": "2026-10-24",
+        "moved": "2026-10-31"
       }
     ]
   },
@@ -3940,9 +3988,10 @@
     56,
     57,
     58,
-    59
+    59,
+    60
   ],
-  "next_lesson": 60,
+  "next_lesson": 61,
   "weak_words": [
     {
       "tr": "ilerlemek",
@@ -4105,45 +4154,6 @@
     "future -EcEK",
     "nominal predicate değil"
   ],
-  "pending_manifest": {
-    "lesson_number": 60,
-    "lesson_title": "ПАССИВ — Суффиксы -IL/-IN/-ÜL/-UN: «быть сделанным»",
-    "session_number": 1,
-    "is_new_lesson": true,
-    "new_words": [
-      {
-        "tr": "yenilmek",
-        "ru": "быть побеждённым / потерпеть поражение"
-      },
-      {
-        "tr": "seyretmek",
-        "ru": "смотреть / наблюдать"
-      },
-      {
-        "tr": "ulaşmak",
-        "ru": "достигать / добираться"
-      },
-      {
-        "tr": "varmak",
-        "ru": "прибывать / добираться"
-      },
-      {
-        "tr": "sinirli",
-        "ru": "раздражительный / нервный"
-      },
-      {
-        "tr": "sakin",
-        "ru": "спокойный / тихий"
-      },
-      {
-        "tr": "neşeli",
-        "ru": "весёлый / жизнерадостный"
-      },
-      {
-        "tr": "öfke",
-        "ru": "гнев / злость"
-      }
-    ]
-  },
-  "pending_since": "2026-10-31"
+  "pending_manifest": null,
+  "pending_since": null
 }
